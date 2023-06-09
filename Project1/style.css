@@ -1,0 +1,130 @@
+
+h1 {
+    margin-top: 0;
+    font-size: 22px;
+  }
+  
+  h2 {
+    margin-top: 0;
+    font-size: 20px;
+  }
+  
+  h3 {
+    margin-top: 0;
+    font-size: 18px;
+  }
+  
+  h4 {
+    margin-top: 0;
+    font-size: 16px;
+  }
+  
+  h5 {
+    margin-top: 0;
+    font-size: 14px;
+  }
+  
+  h6 {
+    margin-top: 0;
+    font-size: 12px;
+  }
+  
+  code {
+    font-size: 1.2em;
+  }
+  
+  ul {
+    padding-left: 20px;
+  }
+  
+  * {
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: sans-serif;
+    margin: 20px;
+    padding: 0;
+    background-color: black;
+  }
+  
+  .square {
+      display: grid;
+      place-content: center;
+      width: 100px;
+      height: 100px;
+      border-color: black;
+      border-style: outset;
+      background-color: rgb(203, 144, 85);
+  }
+  .square.invalid{
+    background-color: #ad2525;
+  }
+  
+  .game {
+      display: flex;
+      flex-direction: column;
+  }
+
+
+  
+  .board {
+    display: grid;
+      grid-template-columns: repeat(8,100px);
+      grid-template-rows: repeat(8,100px);
+      width: 800px;
+      height: 800px;
+  }
+  
+  #root{
+      display: grid;
+      place-content: center;
+      height: 100vh;
+  }
+  
+  
+  
+  .tile.Blacktile{
+      width:40px;
+      height:40px;
+      background-color: black;
+      border-color: black;
+      border-style: outset;
+  }
+  .tile.Whitetile{
+      width:40px;
+      height:40px;
+      background-color: wheat;
+      border-color: white;
+      border-style: outset;
+  }
+  .tile.Emptytile{
+      width:40px;
+      height:40px;
+  }
+  
+  .tile.Invalidtile{
+      width:100px;
+      height:100px;
+      border-color: red;
+      border-style: outset;
+  }
+  .tile.Validtile{
+    width:100px;
+      height:100px;
+      border-color: greenyellow;
+      border-style: outset;
+  }
+  
+  .status {
+    margin-bottom: 0px;
+    background-color: white;
+    font-size:35px;
+    height: fit-content;
+    text-align: center;
+  }
+  
+  .status.Finish{
+    background-color: aqua  ;
+  }
+  
