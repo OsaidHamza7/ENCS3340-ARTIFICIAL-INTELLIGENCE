@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <div id="root"></div>
+</body>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script async src="https://ga.jspm.io/npm:es-module-shims@1.7.0/dist/es-module-shims.js"></script>
+<link rel="stylesheet" href="style.css">
+
+<script type="importmap">
+
+{
+  "imports": {
+    "react": "https://esm.sh/react?dev",
+    "react-dom/client": "https://esm.sh/react-dom/client?dev"
+  }
+}
+
+</script>
+
+<script type="text/babel" data-type="module" src="code.js"></script>
+
+</html>
