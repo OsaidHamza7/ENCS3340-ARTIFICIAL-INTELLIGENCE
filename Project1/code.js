@@ -58,11 +58,12 @@ function Board({ blackIsNext, squares, onPlay,invalidSquares }) {
               }
           
             }
-          
+        if (nextSquares[n]==null){
         nextSquares[n]="Valid";
         await sleep(300);
         nextSquares[n]=null;
         onPlay(nextSquares,1); 
+        }
 
     }
     else{
