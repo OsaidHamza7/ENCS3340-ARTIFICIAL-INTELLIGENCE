@@ -57,11 +57,12 @@ function Board({ blackIsNext, squares, onPlay,invalidSquares }) {
                   n=i-1;
               }
           
+    
             }
+            const move = new Audio('move.mp3');
+            // Play the audio
+            move.play();    
         if (nextSquares[n]==null){
-        const move = new Audio('move.mp3');
-        // Play the audio
-        move.play();
         nextSquares[n]="Valid";
         await sleep(300);
         nextSquares[n]=null;
@@ -97,7 +98,7 @@ function Board({ blackIsNext, squares, onPlay,invalidSquares }) {
     st="status Finish";
 
   } else {
- 
+
     status = 'Next player: ' + (blackIsNext ? 'Black' : 'White');
   }
 
