@@ -68,6 +68,9 @@ function Board({ blackIsNext, squares, onPlay,invalidSquares }) {
     }
     else{
         console.log("Invalid Square!!,Please try again");
+        const wrongSound = new Audio('wrong.mp3');
+        // Play the audio
+        wrongSound.play();
         const nextSquares = squares.slice();
         nextSquares[i]="Invalid";
         onPlay(nextSquares,0);
@@ -84,10 +87,16 @@ function Board({ blackIsNext, squares, onPlay,invalidSquares }) {
   let status;
   if (winner) {
     status = 'Winner: ' + winner;
+    const win = new Audio('win.mp3');
+    // Play the audio
+    win.play();
     console.log("Finish Game");
     st="status Finish";
 
   } else {
+    const move = new Audio('move.mp3');
+    // Play the audio
+    move.play();
     status = 'Next player: ' + (blackIsNext ? 'Black' : 'White');
   }
 
