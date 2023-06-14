@@ -252,6 +252,9 @@ function calculateWinner(PlayedSquares) {
   return null;
 }
 
+function generateBoard(){
+  //const List=new Set([0,8,16,24,32,40,48,56,7,15,23,31,39,47,55,63]);
+  //const PlayedSquares=Array(64).fill(null);
 
 const root = createRoot(document.getElementById('root'));
 root.render(
@@ -259,3 +262,60 @@ root.render(
     <App />
   </StrictMode>
 );
+}
+
+
+
+function chooseBlackOrWhite(){
+  let pairsContainer = document.getElementById("root");
+  let pairElement1 = document.createElement("button");
+  pairElement1.classList.add("generate-btn");
+  pairElement1.id="chosenBlack";
+  pairElement1.innerHTML = "Black";
+
+  let pairElement2 = document.createElement("button");
+  pairElement2.classList.add("generate-btn");
+  pairElement2.id="chosenWhite";
+  pairElement2.innerHTML = "White";
+  while (pairsContainer.firstChild) {
+    pairsContainer.removeChild(pairsContainer.firstChild);
+  }
+    pairsContainer.appendChild(pairElement1);
+  pairsContainer.appendChild(pairElement2);
+
+
+  let generateBtn1 = document.getElementById("chosenBlack");
+  generateBtn1.addEventListener("click", generateBoard);
+  let generateBtn2 = document.getElementById("chosenWhite");
+  generateBtn2.addEventListener("click", generateBoard);
+}
+
+
+
+function OneOrTwoPlayers(){
+  let pairsContainer = document.getElementById("root");
+  let pairElement1 = document.createElement("button");
+  pairElement1.classList.add("generate-btn");
+  pairElement1.id="2Players";
+  pairElement1.innerHTML = "2 Players";
+
+  let pairElement2 = document.createElement("button");
+  pairElement2.classList.add("generate-btn");
+  pairElement2.id="1Player";
+  pairElement2.innerHTML = "1 Player";
+  while (pairsContainer.firstChild) {
+    pairsContainer.removeChild(pairsContainer.firstChild);
+  }
+    pairsContainer.appendChild(pairElement1);
+  pairsContainer.appendChild(pairElement2);
+
+
+  let generateBtn1 = document.getElementById("2Players");
+  generateBtn1.addEventListener("click", generateBoard);
+  let generateBtn2 = document.getElementById("1Player");
+  generateBtn2.addEventListener("click", chooseBlackOrWhite);
+}
+
+
+let generateBtn = document.getElementById("PlayGame");
+generateBtn.addEventListener("click", OneOrTwoPlayers);
