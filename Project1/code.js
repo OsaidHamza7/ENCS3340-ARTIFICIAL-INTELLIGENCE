@@ -62,17 +62,17 @@ const List=new Set([0,8,16,24,32,40,48,56,7,15,23,31,39,47,55,63]);
 const PlayedSquares=Array(64).fill(null);
 let AiTurn=0;
 let players=[];
-players=["Black","White"];//default value for 2 players game (black vs white)
+players=["player1","player2"];//default value for 2 players game (black vs white)
 function Board({ player1Turn, squares, onPlay }) {
 
   
   async function handleClick(i) {
     
     if(List.has(i)){
-        if (calculateWinner(PlayedSquares)=="Draw") {
+        if (calculateWinner(PlayedSquares,player1Turn)=="Draw") {
         return;
         }
-        else if (calculateWinner(PlayedSquares) || PlayedSquares[i]) {
+        else if (calculateWinner(PlayedSquares,player1Turn) || PlayedSquares[i]) {
         return;
         }
         const nextSquares = squares.slice();
@@ -133,10 +133,10 @@ function Board({ player1Turn, squares, onPlay }) {
   }
 
   let st="status";
-  const winner = calculateWinner(PlayedSquares);
+  const winner = calculateWinner(PlayedSquares,player1Turn);
   let status;
   if (winner) {
-      if (winner=="Draw") {
+      if (winner=="Draw" ) {
       
         status = 'Draw';
         const Draw = new Audio('gameoverSound.wav');
@@ -161,7 +161,7 @@ function Board({ player1Turn, squares, onPlay }) {
 
   }
 
-
+ 
  
 let DisplayBoard=[];
 for (let i = 0; i < 64; i++) {
@@ -203,59 +203,45 @@ let App = function Game() {
   );
 }
 
-function calculateWinner(PlayedSquares) {
+function calculateWinner(PlayedSquares,player1Turn) {
   if (PlayedSquares.includes(null)===false){
     return "Draw";
     }
-
+    let WinnerPlayer;
+if (player1Turn){
+  WinnerPlayer=players[1];
+} 
+else{
+WinnerPlayer=players[0];
+}
   let j=0;
   let d1=0;
   let d2=4;
 
-  console.log(AiTurn);
   for (let v = 0; v < 32; v++) {
     
     //These are the horizontal cases
     if (PlayedSquares[j] && PlayedSquares[j] === PlayedSquares[j+1] && PlayedSquares[j] === PlayedSquares[j+2] && PlayedSquares[j] === PlayedSquares[j+3] && PlayedSquares[j] === PlayedSquares[j+4]) {
-      if  (AiTurn){
-        return "computer";
-      }
-      else{ 
-            return PlayedSquares[j]+" player";
-      }
+      return WinnerPlayer
     }
     //These are the vertical cases
      if (PlayedSquares[v] && PlayedSquares[v] === PlayedSquares[v+8] && PlayedSquares[v] === PlayedSquares[v+16] && PlayedSquares[v] === PlayedSquares[v+24] && PlayedSquares[v] === PlayedSquares[v+32]) {
-      if  (AiTurn){
-        return "computer";
-      }
-      else{ 
-              return PlayedSquares[v]+" player";
-      }
+      return WinnerPlayer
     }
     
     //These are the diagonal cases
        if (d1<28){
           if (PlayedSquares[d1] && PlayedSquares[d1] === PlayedSquares[d1+9] && PlayedSquares[d1] === PlayedSquares[d1+18] && PlayedSquares[d1] === PlayedSquares[d1+27] && PlayedSquares[d1] === PlayedSquares[d1+36]) {
-            if  (AiTurn){
-              return "computer";
-            }
-            else{ 
-            return PlayedSquares[d1]+" player";
-            }
-          }
+            return WinnerPlayer
         }
+      }
       
        if (d2<32){
         if (PlayedSquares[d2] && PlayedSquares[d2] === PlayedSquares[d2+7] && PlayedSquares[d2] === PlayedSquares[d2+14] && PlayedSquares[d2] === PlayedSquares[d2+21] && PlayedSquares[d2] === PlayedSquares[d2+28]) {
-          if  (AiTurn){
-            return "computer";
-          }
-          else{ 
-                return PlayedSquares[d2]+" player";
-          }
-        }
-        }
+          return WinnerPlayer
+
+      }
+    }
     
 
     if ((++j)%4==0){
@@ -302,11 +288,11 @@ function chooseBlackOrWhite(){
   pairsContainer.appendChild(pairElement1);
   pairsContainer.appendChild(pairElement2);
   function generateBoard1() {
-    players=["Black","Computer"];
+    players=["Player","Computer"];
     generateBoard();
   }
   function generateBoard2() {
-    players=["Computer","White"];
+    players=["Computer","Player"];
     generateBoard();
   }
   let generateBtn1 = document.getElementById("chosenBlack");
@@ -503,4 +489,4 @@ function alphabeta(newBoard, player, alpha, beta){
 
 //start the program
 let generateBtn = document.getElementById("PlayGame");
-generateBtn.addEventListener("click", OneOrTwoPlayers);z
+generateBtn.addEventListener("click", OneOrTwoPlayers);
