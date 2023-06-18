@@ -16,12 +16,8 @@ function Square({ value, onSquareClick}) {
   );
 }
 
-const List=new Set([0,8,16,24,32,40,48,56,7,15,23,31,39,47,55,63]);
-const PlayedSquares=Array(64).fill(null);
-let AiTurn=0;
-let players=[];
-players=["Black","White"];//default value for 2 players game (black vs white)
-function minmax(squares,depth,Turn){
+
+function minmax2(squares,depth,Turn){
   let winner = calculateWinner(squares);
   if (winner) {
     if (winner=="Draw") {
@@ -62,7 +58,12 @@ function minmax(squares,depth,Turn){
   }
 }
 
-function Board({ Turn, squares, onPlay }) {
+const List=new Set([0,8,16,24,32,40,48,56,7,15,23,31,39,47,55,63]);
+const PlayedSquares=Array(64).fill(null);
+let AiTurn=0;
+let players=[];
+players=["Black","White"];//default value for 2 players game (black vs white)
+function Board({ player1Turn, squares, onPlay }) {
 
   
   async function handleClick(i) {
@@ -76,14 +77,12 @@ function Board({ Turn, squares, onPlay }) {
         }
         const nextSquares = squares.slice();
         let n=0;
-        if (Turn) {
+        if (player1Turn) {
           nextSquares[i] = 'Black';
           PlayedSquares[i] = 'Black';
-
           } else {
           nextSquares[i] = 'White';
           PlayedSquares[i] = 'White';
-
           } 
           onPlay(nextSquares,1);
           if(i==0){
@@ -147,7 +146,7 @@ function Board({ Turn, squares, onPlay }) {
         st="status Draw";
       }
 
-      else if (winner) {
+      else{
         status = 'Winner: ' + winner;
         const win = new Audio('win.mp3');
         // Play the audio
@@ -158,7 +157,7 @@ function Board({ Turn, squares, onPlay }) {
       }
   }
    else {
-    status = 'Next player: ' + (Turn ? players[0]: players[1]);
+    status = 'Next player: ' + (player1Turn ? players[0]: players[1]);
 
   }
 
@@ -182,7 +181,7 @@ return  (
 let App = function Game() {
   const [history, setHistory] = useState([Array(64).fill(null)]);
   const [currentMove, setCurrentMove] = useState(0);
-  const Turn = currentMove % 2 === 0;
+  const player1Turn = currentMove % 2 === 0;
   const currentSquares = history[currentMove];
   function handlePlay(nextSquares,num) {
     if(num==1){//valid move
@@ -199,7 +198,7 @@ let App = function Game() {
 
   return (
     <div className="game">
-        <Board Turn={Turn} squares={currentSquares} onPlay={handlePlay}/>
+        <Board player1Turn={player1Turn} squares={currentSquares} onPlay={handlePlay}/>
     </div>
   );
 }
@@ -502,6 +501,6 @@ function alphabeta(newBoard, player, alpha, beta){
 
 
 
-
+//start the program
 let generateBtn = document.getElementById("PlayGame");
 generateBtn.addEventListener("click", OneOrTwoPlayers);z
