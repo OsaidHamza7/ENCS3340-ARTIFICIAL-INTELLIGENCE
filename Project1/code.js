@@ -7,7 +7,7 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-function Square({ value, onSquareClick,c}) {
+function Square({ value, onSquareClick}) {
   let t="tile "+value+"tile";
   return (
     <button className="square" onClick={onSquareClick}>
@@ -18,18 +18,65 @@ function Square({ value, onSquareClick,c}) {
 
 const List=new Set([0,8,16,24,32,40,48,56,7,15,23,31,39,47,55,63]);
 const PlayedSquares=Array(64).fill(null);
+let AiTurn=0;
+let players=[];
+players=["Black","White"];//default value for 2 players game (black vs white)
+function minmax(squares,depth,Turn){
+  let winner = calculateWinner(squares);
+  if (winner) {
+    if (winner=="Draw") {
+      return 0;
+    }
+    else if (winner) {
+      if (winner=="Black") {
+        return 10-depth;
+      }
+      else{
+        return depth-10;
+      }
+    }
+  }
+  else{
+    if (Turn) {
+      let best=-100;
+      for (let i = 0; i < 64; i++) {
+        if (squares[i]==null) {
+          squares[i]="Black";
+          best=Math.max(best,minmax(squares,depth+1,!Turn));
+          squares[i]=null;
+        }
+      }
+      return best;
+    }
+    else{
+      let best=100;
+      for (let i = 0; i < 64; i++) {
+        if (squares[i]==null) {
+          squares[i]="White";
+          best=Math.min(best,minmax(squares,depth+1,!Turn));
+          squares[i]=null;
+        }
+      }
+      return best;
+    }
+  }
+}
 
-function Board({ blackIsNext, squares, onPlay,invalidSquares }) {
+function Board({ Turn, squares, onPlay }) {
 
+  
   async function handleClick(i) {
     
     if(List.has(i)){
-        if (calculateWinner(PlayedSquares) || PlayedSquares[i]) {
+        if (calculateWinner(PlayedSquares)=="Draw") {
+        return;
+        }
+        else if (calculateWinner(PlayedSquares) || PlayedSquares[i]) {
         return;
         }
         const nextSquares = squares.slice();
         let n=0;
-        if (blackIsNext) {
+        if (Turn) {
           nextSquares[i] = 'Black';
           PlayedSquares[i] = 'Black';
 
@@ -90,172 +137,145 @@ function Board({ blackIsNext, squares, onPlay,invalidSquares }) {
   const winner = calculateWinner(PlayedSquares);
   let status;
   if (winner) {
-    status = 'Winner: ' + winner;
-    const win = new Audio('win.mp3');
-    // Play the audio
-    win.play();
-    console.log("Finish Game");
-    st="status Finish";
+      if (winner=="Draw") {
+      
+        status = 'Draw';
+        const Draw = new Audio('gameoverSound.wav');
+        // Play the audio
+        Draw.play();
+        console.log("Finish Game");
+        st="status Draw";
+      }
 
-  } else {
+      else if (winner) {
+        status = 'Winner: ' + winner;
+        const win = new Audio('win.mp3');
+        // Play the audio
+        win.play();
+        console.log("Finish Game");
+        st="status Finish";
 
-    status = 'Next player: ' + (blackIsNext ? 'Black' : 'White');
+      }
+  }
+   else {
+    status = 'Next player: ' + (Turn ? players[0]: players[1]);
+
   }
 
-  return (
-    <>
-    <div className={st}>{status}</div>;
 
-        <div className="board">
-        <Square value={squares[0]} onSquareClick={() => handleClick(0)} c={invalidSquares[0]}/>
-        <Square value={squares[1]} onSquareClick={() => handleClick(1)} c={invalidSquares[1]}/>
-        <Square value={squares[2]} onSquareClick={() => handleClick(2)} c={invalidSquares[2]}/>
-        <Square value={squares[3]} onSquareClick={() => handleClick(3)} c={invalidSquares[3]}/>
-        <Square value={squares[4]} onSquareClick={() => handleClick(4)} c={invalidSquares[4]}/>
-        <Square value={squares[5]} onSquareClick={() => handleClick(5)} c={invalidSquares[5]}/>
-        <Square value={squares[6]} onSquareClick={() => handleClick(6)} c={invalidSquares[6]}/>
-        <Square value={squares[7]} onSquareClick={() => handleClick(7)} c={invalidSquares[7]}/>
+ 
+let DisplayBoard=[];
+for (let i = 0; i < 64; i++) {
+  DisplayBoard.push(<Square value={squares[i]} onSquareClick={() => handleClick(i)} />);
+}
 
-        <Square value={squares[8]} onSquareClick={() => handleClick(8)} c={invalidSquares[8]}/>
-        <Square value={squares[9]} onSquareClick={() => handleClick(9)} c={invalidSquares[9]}/>
-        <Square value={squares[10]} onSquareClick={() => handleClick(10)} c={invalidSquares[10]}/>
-        <Square value={squares[11]} onSquareClick={() => handleClick(11)} c={invalidSquares[11]}/>
-        <Square value={squares[12]} onSquareClick={() => handleClick(12)} c={invalidSquares[12]}/>
-        <Square value={squares[13]} onSquareClick={() => handleClick(13)} c={invalidSquares[13]}/>
-        <Square value={squares[14]} onSquareClick={() => handleClick(14)} c={invalidSquares[14]}/>
-        <Square value={squares[15]} onSquareClick={() => handleClick(15)} c={invalidSquares[15]}/>
-
-        <Square value={squares[16]} onSquareClick={() => handleClick(16)} c={invalidSquares[16]}/>
-        <Square value={squares[17]} onSquareClick={() => handleClick(17)} c={invalidSquares[17]}/>
-        <Square value={squares[18]} onSquareClick={() => handleClick(18)} c={invalidSquares[18]}/>
-        <Square value={squares[19]} onSquareClick={() => handleClick(19)} c={invalidSquares[19]}/>
-        <Square value={squares[20]} onSquareClick={() => handleClick(20)} c={invalidSquares[20]}/>
-        <Square value={squares[21]} onSquareClick={() => handleClick(21)} c={invalidSquares[21]}/>
-        <Square value={squares[22]} onSquareClick={() => handleClick(22)} c={invalidSquares[22]}/>
-        <Square value={squares[23]} onSquareClick={() => handleClick(23)} c={invalidSquares[23]}/>
-
-        <Square value={squares[24]} onSquareClick={() => handleClick(24)} c={invalidSquares[24]}/>
-        <Square value={squares[25]} onSquareClick={() => handleClick(25)} c={invalidSquares[25]}/>
-        <Square value={squares[26]} onSquareClick={() => handleClick(26)} c={invalidSquares[26]}/>
-        <Square value={squares[27]} onSquareClick={() => handleClick(27)} c={invalidSquares[27]}/>
-        <Square value={squares[28]} onSquareClick={() => handleClick(28)} c={invalidSquares[28]}/>
-        <Square value={squares[29]} onSquareClick={() => handleClick(29)} c={invalidSquares[29]}/>
-        <Square value={squares[30]} onSquareClick={() => handleClick(30)} c={invalidSquares[30]}/>
-        <Square value={squares[31]} onSquareClick={() => handleClick(31)} c={invalidSquares[31]}/>
-
-        <Square value={squares[32]} onSquareClick={() => handleClick(32)} c={invalidSquares[32]}/>
-        <Square value={squares[33]} onSquareClick={() => handleClick(33)} c={invalidSquares[33]}/>
-        <Square value={squares[34]} onSquareClick={() => handleClick(34)} c={invalidSquares[34]}/>
-        <Square value={squares[35]} onSquareClick={() => handleClick(35)} c={invalidSquares[35]}/>
-        <Square value={squares[36]} onSquareClick={() => handleClick(36)} c={invalidSquares[36]}/>
-        <Square value={squares[37]} onSquareClick={() => handleClick(37)} c={invalidSquares[37]}/>
-        <Square value={squares[38]} onSquareClick={() => handleClick(38)} c={invalidSquares[38]}/>
-        <Square value={squares[39]} onSquareClick={() => handleClick(39)} c={invalidSquares[39]}/>
-        <Square value={squares[40]} onSquareClick={() => handleClick(40)} c={invalidSquares[40]}/>
-        <Square value={squares[41]} onSquareClick={() => handleClick(41)} c={invalidSquares[41]}/>
-        <Square value={squares[42]} onSquareClick={() => handleClick(42)} c={invalidSquares[42]}/>
-        <Square value={squares[43]} onSquareClick={() => handleClick(43)} c={invalidSquares[43]}/>
-        <Square value={squares[44]} onSquareClick={() => handleClick(44)} c={invalidSquares[44]}/>
-        <Square value={squares[45]} onSquareClick={() => handleClick(45)} c={invalidSquares[45]}/>
-        <Square value={squares[46]} onSquareClick={() => handleClick(46)} c={invalidSquares[46]}/>
-        <Square value={squares[47]} onSquareClick={() => handleClick(47)} c={invalidSquares[47]}/>
-        <Square value={squares[48]} onSquareClick={() => handleClick(48)} c={invalidSquares[48]}/>
-        <Square value={squares[49]} onSquareClick={() => handleClick(49)} c={invalidSquares[49]}/>
-        <Square value={squares[50]} onSquareClick={() => handleClick(50)} c={invalidSquares[50]}/>
-        <Square value={squares[51]} onSquareClick={() => handleClick(51)} c={invalidSquares[51]}/>
-        <Square value={squares[52]} onSquareClick={() => handleClick(52)} c={invalidSquares[52]}/>
-        <Square value={squares[53]} onSquareClick={() => handleClick(53)} c={invalidSquares[53]}/>
-        <Square value={squares[54]} onSquareClick={() => handleClick(54)} c={invalidSquares[54]}/>
-        <Square value={squares[55]} onSquareClick={() => handleClick(55)} c={invalidSquares[55]}/>
-  
-        <Square value={squares[56]} onSquareClick={() => handleClick(56)} c={invalidSquares[56]}/>
-        <Square value={squares[57]} onSquareClick={() => handleClick(57)} c={invalidSquares[57]}/>
-        <Square value={squares[58]} onSquareClick={() => handleClick(58)} c={invalidSquares[58]}/>
-        <Square value={squares[59]} onSquareClick={() => handleClick(59)} c={invalidSquares[59]}/>
-        <Square value={squares[60]} onSquareClick={() => handleClick(60)} c={invalidSquares[60]}/>
-        <Square value={squares[61]} onSquareClick={() => handleClick(61)} c={invalidSquares[61]}/>
-        <Square value={squares[62]} onSquareClick={() => handleClick(62)} c={invalidSquares[62]}/>
-        <Square value={squares[63]} onSquareClick={() => handleClick(63)} c={invalidSquares[63]}/>
+return  (
+  <>
+  <div className={st}>{status}</div>;
+      <div className="board">
+        {DisplayBoard}
         </div>
-
-    </>
-    
+        </>
   );
 }
 
 let App = function Game() {
   const [history, setHistory] = useState([Array(64).fill(null)]);
   const [currentMove, setCurrentMove] = useState(0);
-  const blackIsNext = currentMove % 2 === 0;
+  const Turn = currentMove % 2 === 0;
   const currentSquares = history[currentMove];
-  const invSquares = new Array(64).fill("square"); 
   function handlePlay(nextSquares,num) {
-    if(num==1){
+    if(num==1){//valid move
       const nextHistory = [...history.slice(0, currentMove +1), nextSquares];
       setHistory(nextHistory);
       setCurrentMove(nextHistory.length - 1);
     }
-    else{
+    else{//invalid move
       const nextHistory = [...history.slice(0, currentMove), nextSquares];
       setHistory(nextHistory);
-      //setCurrentMove(currentMove);
     }
     
   }
 
   return (
     <div className="game">
-        <Board blackIsNext={blackIsNext} squares={currentSquares} onPlay={handlePlay} invalidSquares={invSquares}/>
+        <Board Turn={Turn} squares={currentSquares} onPlay={handlePlay}/>
     </div>
   );
 }
 
 function calculateWinner(PlayedSquares) {
-  const lines = [
-    //vertical
-    [0, 1, 2, 3, 4],[1,2,3,4,5],[2,3,4,5,6],[3,4,5,6,7],
-    [8,9,10,11,12],[9,10,11,12,13],[10,11,12,13,14],[11,12,13,14,15],
-    [16,17,18,19,20],[17,18,19,20,21],[18,19,20,21,22],[19,20,21,22,23],
-    [24,25,26,27,28],[25,26,27,28,29],[26,27,28,29,30],[27,28,29,30,31],
-    [32,33,34,35,36],[33,34,35,36,37],[34,35,36,37,38],[35,36,37,38,39],
-    [40,41,42,43,44],[41,42,43,44,45],[42,43,44,45,46],[43,44,45,46,47],
-    [48,49,50,51,52],[49,50,51,52,53],[50,51,52,53,54],[51,52,53,54,55],
-    [56,57,58,59,60],[57,58,59,60,61],[58,59,60,61,62],[59,60,61,62,63],
+  if (PlayedSquares.includes(null)===false){
+    return "Draw";
+    }
 
-    //
-    [0,8,16,24,32],[8,16,24,32,40],[16,24,32,40,48],[24,32,40,48,56],
-    [1,9,17,25,33],[9,17,25,33,41],[17,25,33,41,49],[25,33,41,49,57],
-    [2,10,18,26,34],[10,18,26,34,42],[18,26,34,42,50],[26,34,42,50,58],
-    [3,11,19,27,35],[11,19,27,35,43],[19,27,35,43,51],[27,35,43,51,59],
-    [4,12,20,28,36],[12,20,28,36,44],[20,28,36,44,52],[28,36,44,52,60],
-    [5,13,21,29,37],[13,21,29,37,45],[21,29,37,45,53],[29,37,45,53,61],
-    [6,14,22,30,38],[14,22,30,38,46],[22,30,38,46,54],[30,38,46,54,62],
-    [7,15,23,31,39],[15,23,31,39,47],[23,31,39,47,55],[31,39,47,55,63],
+  let j=0;
+  let d1=0;
+  let d2=4;
+
+  console.log(AiTurn);
+  for (let v = 0; v < 32; v++) {
     
-    [24,33,42,51,60],[16,25,34,43,52],[25,34,43,52,61],[8,17,26,35,44],
-    [17,26,35,44,53],[26,35,44,53,62],[0,9,18,27,36],[9,18,27,36,45],
-    [18,27,36,45,54],[27,36,45,54,63],[1,10,19,28,37],[10,19,28,37,46],
-    [19,28,37,46,55],[2,11,20,29,38],[11,20,29,38,47],[3,12,21,30,39],
+    //These are the horizontal cases
+    if (PlayedSquares[j] && PlayedSquares[j] === PlayedSquares[j+1] && PlayedSquares[j] === PlayedSquares[j+2] && PlayedSquares[j] === PlayedSquares[j+3] && PlayedSquares[j] === PlayedSquares[j+4]) {
+      if  (AiTurn){
+        return "computer";
+      }
+      else{ 
+            return PlayedSquares[j]+" player";
+      }
+    }
+    //These are the vertical cases
+     if (PlayedSquares[v] && PlayedSquares[v] === PlayedSquares[v+8] && PlayedSquares[v] === PlayedSquares[v+16] && PlayedSquares[v] === PlayedSquares[v+24] && PlayedSquares[v] === PlayedSquares[v+32]) {
+      if  (AiTurn){
+        return "computer";
+      }
+      else{ 
+              return PlayedSquares[v]+" player";
+      }
+    }
+    
+    //These are the diagonal cases
+       if (d1<28){
+          if (PlayedSquares[d1] && PlayedSquares[d1] === PlayedSquares[d1+9] && PlayedSquares[d1] === PlayedSquares[d1+18] && PlayedSquares[d1] === PlayedSquares[d1+27] && PlayedSquares[d1] === PlayedSquares[d1+36]) {
+            if  (AiTurn){
+              return "computer";
+            }
+            else{ 
+            return PlayedSquares[d1]+" player";
+            }
+          }
+        }
+      
+       if (d2<32){
+        if (PlayedSquares[d2] && PlayedSquares[d2] === PlayedSquares[d2+7] && PlayedSquares[d2] === PlayedSquares[d2+14] && PlayedSquares[d2] === PlayedSquares[d2+21] && PlayedSquares[d2] === PlayedSquares[d2+28]) {
+          if  (AiTurn){
+            return "computer";
+          }
+          else{ 
+                return PlayedSquares[d2]+" player";
+          }
+        }
+        }
+    
 
-    [4,11,18,25,32],[5,12,19,26,33],[12,19,26,33,40],[6,13,20,27,34],
-    [13,20,27,34,41],[20,27,34,41,48],[7,14,21,28,35],[14,21,28,35,42],
-    [21,28,35,42,49],[28,35,42,49,56],[15,22,29,36,43],[22,29,36,43,50],
-    [29,36,43,50,57],[23,30,37,44,51],[30,37,44,51,58],[31,38,45,52,59],
-  
-  ];
-  for (let i = 0; i < lines.length; i++) {
-    const [a, b, c,d,e] = lines[i];
-    if (PlayedSquares[a] && PlayedSquares[a] === PlayedSquares[b] && PlayedSquares[a] === PlayedSquares[c] && PlayedSquares[a] === PlayedSquares[d] && PlayedSquares[a] === PlayedSquares[e]) {
-      return PlayedSquares[a];
+    if ((++j)%4==0){
+      j+=4;
+    }
+    if ((++d1)%4==0){
+      d1+=4;
+    }
+    if ((++d2)%8==0){
+      d2+=4;
     }
   }
+
+
+  //no winner yet
   return null;
 }
 
 function generateBoard(){
-  //const List=new Set([0,8,16,24,32,40,48,56,7,15,23,31,39,47,55,63]);
-  //const PlayedSquares=Array(64).fill(null);
-
 const root = createRoot(document.getElementById('root'));
 root.render(
   <StrictMode>
@@ -264,45 +284,51 @@ root.render(
 );
 }
 
-
-
+//screen to choose black or white
 function chooseBlackOrWhite(){
   let pairsContainer = document.getElementById("root");
   let pairElement1 = document.createElement("button");
   pairElement1.classList.add("generate-btn");
   pairElement1.id="chosenBlack";
-  pairElement1.innerHTML = "Black";
+  pairElement1.innerHTML = "I'm Black";
 
   let pairElement2 = document.createElement("button");
   pairElement2.classList.add("generate-btn");
   pairElement2.id="chosenWhite";
-  pairElement2.innerHTML = "White";
+  pairElement2.innerHTML = "I'm White";
+
   while (pairsContainer.firstChild) {
     pairsContainer.removeChild(pairsContainer.firstChild);
   }
-    pairsContainer.appendChild(pairElement1);
+  pairsContainer.appendChild(pairElement1);
   pairsContainer.appendChild(pairElement2);
-
-
+  function generateBoard1() {
+    players=["Black","Computer"];
+    generateBoard();
+  }
+  function generateBoard2() {
+    players=["Computer","White"];
+    generateBoard();
+  }
   let generateBtn1 = document.getElementById("chosenBlack");
-  generateBtn1.addEventListener("click", generateBoard);
+  generateBtn1.addEventListener("click", generateBoard1);  
   let generateBtn2 = document.getElementById("chosenWhite");
-  generateBtn2.addEventListener("click", generateBoard);
+  generateBtn2.addEventListener("click", generateBoard2);
 }
 
 
-
+//screen of one or two players
 function OneOrTwoPlayers(){
   let pairsContainer = document.getElementById("root");
   let pairElement1 = document.createElement("button");
   pairElement1.classList.add("generate-btn");
-  pairElement1.id="2Players";
-  pairElement1.innerHTML = "2 Players";
+  pairElement1.id="vs Friends";
+  pairElement1.innerHTML = "play vs Friends";
 
   let pairElement2 = document.createElement("button");
   pairElement2.classList.add("generate-btn");
-  pairElement2.id="1Player";
-  pairElement2.innerHTML = "1 Player";
+  pairElement2.id="vs Computer";
+  pairElement2.innerHTML = "play vs Computer";
   while (pairsContainer.firstChild) {
     pairsContainer.removeChild(pairsContainer.firstChild);
   }
@@ -310,12 +336,12 @@ function OneOrTwoPlayers(){
   pairsContainer.appendChild(pairElement2);
 
 
-  let generateBtn1 = document.getElementById("2Players");
+  let generateBtn1 = document.getElementById("vs Friends");
   generateBtn1.addEventListener("click", generateBoard);
-  let generateBtn2 = document.getElementById("1Player");
+  let generateBtn2 = document.getElementById("vs Computer");
   generateBtn2.addEventListener("click", chooseBlackOrWhite);
 }
 
-
+//start the program
 let generateBtn = document.getElementById("PlayGame");
 generateBtn.addEventListener("click", OneOrTwoPlayers);

@@ -74,7 +74,15 @@ display: block;
    height: 86vh;
   }
 
-
+  .GameInstructions{
+    font-size: 35px;
+    height: fit-content;
+    text-align: center;
+    margin: 30px auto;
+    padding: 10px;
+    color: #fff;
+    border: none;
+    border-radius: 5px;  }
 
 .board {
   display: grid;
@@ -135,6 +143,9 @@ display: block;
   background-color: aqua  ;
 }
 
+.status.Draw{
+  background-color: red  ;
+}
 .generate-btn{
   display: block;
   margin: 102px auto;

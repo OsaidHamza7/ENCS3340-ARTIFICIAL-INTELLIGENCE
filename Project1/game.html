@@ -3,7 +3,35 @@
 <body>
   <h1>Magnetic Cave</h1>
   <div id="root">
-  <button class="generate-btn" id="PlayGame">Play Game</button>
+    <div class="GameInstructions">
+  <p>
+    Magnetic Cave is a 2-player adversary game where each player tries to build a “bridge” of 5 magnetic bricks within a
+    cave whose left and right walls are magnetic. For the sake of this project, the bricks of one player will be represented
+    by a ■ and the bricks of the other by a □.    <br>
+    The version of Magnetic Cave that you will implement will be played on a
+    regular 8x8 chess board.    <br>
+
+    The rules of the game are simple:    <br>
+
+    - Initially, the cave (the board) is empty.    <br>
+
+    - Player ■ and player □ move in an alternate fashion, starting with ■. So ■ starts, followed by □, then ■ again,
+    then □ again, ...    <br>
+
+    - Because there are two big magnets on each side of the cave, a player can only place a brick on an empty cell
+    of the cave provided that the brick is stacked directly on the left or right wall, or is stacked to the left or the
+    right of another brick (of any color).    <br>
+
+    - As soon as one player is able to align 5 consecutive bricks in a row, in a column or in a diagonal, then this
+    <br>
+    - If no player is able to achieve a winning configuration and the board is full, then the game stops and there is a tie.
+    The following figures show possible configurations of the game.</p>
+    <img src="winWhite.png" alt="Game Configurations" width="500" height="600">
+    <img src="InvalidMove.png" alt="Game Configurations" width="500" height="600">
+    <img src="Draw.png" alt="Game Configurations" width="500" height="600">
+
+    <button class="generate-btn" id="PlayGame">Start Game</button>
+  </div>
 </div>
 </body>
 <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
