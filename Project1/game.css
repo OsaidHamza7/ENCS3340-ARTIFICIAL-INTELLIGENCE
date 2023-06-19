@@ -3,12 +3,9 @@ h1 {
   font-size: 35px;
   height: fit-content;
   text-align: center;
-  margin: 30px auto;
-  padding: 10px;
   background-color: #007bff;
   color: #fff;
-  border: none;
-  border-radius: 5px;
+
 }
 
 h2 {
@@ -53,6 +50,7 @@ display: block;
     margin: 8px;
     background-color: black;
     font-family: "Sofia", sans-serif;
+    background-image: image-set("background1.jpg");
 }
 
 .square {
@@ -71,7 +69,7 @@ display: block;
 .game {
   display: grid; 
    place-content: center; 
-   height: 86vh;
+   height: 90vh;
   }
 
   .GameInstructions{

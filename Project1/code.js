@@ -58,17 +58,20 @@ function minmax2(squares,depth,Turn){
   }
 }
 
-const List=new Set([0,8,16,24,32,40,48,56,7,15,23,31,39,47,55,63]);
+const ValidMoves=new Set([0,8,16,24,32,40,48,56,7,15,23,31,39,47,55,63]);
 const PlayedSquares=Array(64).fill(null);
-let AiTurn=0;
 let players=[];
-players=["player1","player2"];//default value for 2 players game (black vs white)
+players=["player1","player2"];//default value for 2 players game (player1 vs player2)
 function Board({ player1Turn, squares, onPlay }) {
 
-  
+
+
   async function handleClick(i) {
-    
-    if(List.has(i)){
+    console.log("clicked on square "+i);
+    console.log("player1Turn "+player1Turn);
+
+    if(ValidMoves.has(i)){
+      ValidMoves.delete(i);
         if (calculateWinner(PlayedSquares,player1Turn)=="Draw") {
         return;
         }
@@ -76,7 +79,7 @@ function Board({ player1Turn, squares, onPlay }) {
         return;
         }
         const nextSquares = squares.slice();
-        let n=0;
+        let n;
         if (player1Turn) {
           nextSquares[i] = 'Black';
           PlayedSquares[i] = 'Black';
@@ -86,35 +89,32 @@ function Board({ player1Turn, squares, onPlay }) {
           } 
           onPlay(nextSquares,1);
           if(i==0){
-              List.add(1);
               n=1;
           }
           else if(i==63){
-              List.add(62);
-              n=63;
+              n=62;
           }
           else{
-              if(List.has(i-1)){
-                  List.add(i+1);
+              if(ValidMoves.has(i-1)){
                   n=i+1;
               }
               else{
-                  List.add(i-1);
                   n=i-1;
               }
-          
-    
+            }
+            if (nextSquares[n]==null)
+            {
+              ValidMoves.add(n);
             }
             const move = new Audio('move.mp3');
             // Play the audio
             move.play();    
-        if (nextSquares[n]==null){
+      /*  if (nextSquares[n]==null){
         nextSquares[n]="Valid";
         await sleep(300);
         nextSquares[n]=null;
         onPlay(nextSquares,1); 
-        }
-
+        }*/
     }
     else{
         console.log("Invalid Square!!,Please try again");
@@ -127,17 +127,14 @@ function Board({ player1Turn, squares, onPlay }) {
         await sleep(300);
         nextSquares[i]=null;
         onPlay(nextSquares,0); 
-
     }
-
+    player1Turn=!player1Turn;
   }
-
   let st="status";
   const winner = calculateWinner(PlayedSquares,player1Turn);
   let status;
   if (winner) {
       if (winner=="Draw" ) {
-      
         status = 'Draw';
         const Draw = new Audio('gameoverSound.wav');
         // Play the audio
@@ -145,7 +142,6 @@ function Board({ player1Turn, squares, onPlay }) {
         console.log("Finish Game");
         st="status Draw";
       }
-
       else{
         status = 'Winner: ' + winner;
         const win = new Audio('win.mp3');
@@ -158,16 +154,11 @@ function Board({ player1Turn, squares, onPlay }) {
   }
    else {
     status = 'Next player: ' + (player1Turn ? players[0]: players[1]);
-
   }
-
- 
- 
 let DisplayBoard=[];
 for (let i = 0; i < 64; i++) {
   DisplayBoard.push(<Square value={squares[i]} onSquareClick={() => handleClick(i)} />);
 }
-
 return  (
   <>
   <div className={st}>{status}</div>;
@@ -183,13 +174,24 @@ let App = function Game() {
   const [currentMove, setCurrentMove] = useState(0);
   const player1Turn = currentMove % 2 === 0;
   const currentSquares = history[currentMove];
+
+
   function handlePlay(nextSquares,num) {
+    if (players[1]=="Computer" ){
+      console.log("Computer Turn");
+      const validMovesArray = Array.from(ValidMoves);
+      nextSquares[validMovesArray[0]]="White";
+      ValidMoves.delete(validMovesArray[0]);
+      const nextHistory = [...history.slice(0, currentMove +1), nextSquares];
+      setHistory(nextHistory);
+      setCurrentMove(nextHistory.length - 1);
+    }
     if(num==1){//valid move
       const nextHistory = [...history.slice(0, currentMove +1), nextSquares];
       setHistory(nextHistory);
       setCurrentMove(nextHistory.length - 1);
     }
-    else{//invalid move
+    else{//invalid move so don't change the history
       const nextHistory = [...history.slice(0, currentMove), nextSquares];
       setHistory(nextHistory);
     }
@@ -201,6 +203,11 @@ let App = function Game() {
         <Board player1Turn={player1Turn} squares={currentSquares} onPlay={handlePlay}/>
     </div>
   );
+
+
+}
+function PlayComputer(currentSquares){
+
 }
 
 function calculateWinner(PlayedSquares,player1Turn) {
