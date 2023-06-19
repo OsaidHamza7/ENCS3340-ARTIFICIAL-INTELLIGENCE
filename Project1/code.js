@@ -60,18 +60,67 @@ function minmax2(squares,depth,Turn){
 
 const ValidMoves=new Set([0,8,16,24,32,40,48,56,7,15,23,31,39,47,55,63]);
 const PlayedSquares=Array(64).fill(null);
-let players=[];
-players=["player1","player2"];//default value for 2 players game (player1 vs player2)
+let players=["player1","player2"];//default value for 2 players game (player1 vs player2)
+let PlayerTurn=players[0];
+let ColorPlayer1="Black";
+let ColorPlayer2="White";
+
+
+
+function openNewMove(i,squares){
+  
+}
+
 function Board({ player1Turn, squares, onPlay }) {
 
+  if (PlayerTurn=="Computer"){
+    const nextSquares = squares.slice();
+    console.log("Computer Turn");
+    let  validMovesArray = Array.from(ValidMoves);
+    let j=validMovesArray[0];
 
-
+    nextSquares[j]=ColorPlayer2;
+    PlayedSquares[j]=ColorPlayer2;
+    let nextSquare;
+    console.log("j "+j);
+    if(j==0){
+      nextSquare=1;
+  }
+  else if(j==63){
+      nextSquare=62;
+  }
+  else{
+    if (j%8==0){
+      nextSquare=j+1;
+    }
+    else if (j%8==7){
+      nextSquare=j-1;
+    }
+    else if(PlayedSquares[j-1]!==null){
+      nextSquare=j+1;
+      }
+      else{
+          nextSquare=j-1;
+      }
+    }
+    if (nextSquares[nextSquare]==null)
+    {
+      ValidMoves.add(nextSquare);
+      console.log("openNewMove with computer "+nextSquare);
+    }
+    ValidMoves.delete(j);
+    console.log("ValidMoves ",ValidMoves);
+    onPlay(nextSquares,1);
+    PlayerTurn="Player";
+    player1Turn=!player1Turn;
+    const move = new Audio('move.mp3');
+    // Play the audio
+    move.play();  
+  }
   async function handleClick(i) {
     console.log("clicked on square "+i);
-    console.log("player1Turn "+player1Turn);
-
+    console.log("PlayerTurn "+PlayerTurn);  
     if(ValidMoves.has(i)){
-      ValidMoves.delete(i);
         if (calculateWinner(PlayedSquares,player1Turn)=="Draw") {
         return;
         }
@@ -80,43 +129,66 @@ function Board({ player1Turn, squares, onPlay }) {
         }
         const nextSquares = squares.slice();
         let n;
-        if (player1Turn) {
-          nextSquares[i] = 'Black';
-          PlayedSquares[i] = 'Black';
-          } else {
-          nextSquares[i] = 'White';
-          PlayedSquares[i] = 'White';
+        if (PlayerTurn=="Player"){
+          nextSquares[i] = ColorPlayer1;
+          PlayedSquares[i] = ColorPlayer1;
+          PlayerTurn= "Computer";
+        }
+       else if (player1Turn==true) {
+            nextSquares[i] = ColorPlayer1;
+            PlayedSquares[i] = ColorPlayer1;
+            PlayerTurn= players[1];
           } 
-          onPlay(nextSquares,1);
-          if(i==0){
-              n=1;
+          else {
+          nextSquares[i] = ColorPlayer2;
+          PlayedSquares[i] = ColorPlayer2;
+          PlayerTurn= players[0];
+          } 
+          player1Turn=!player1Turn;
+          let nextSquare;
+
+            if(i==0){
+              nextSquare=1;
           }
           else if(i==63){
-              n=62;
+              nextSquare=62;
           }
           else{
-              if(ValidMoves.has(i-1)){
-                  n=i+1;
+            if (i%8==0){
+              nextSquare=i+1;
+            }
+            else if (i%8==7){
+              nextSquare=i-1;
+            }
+            else if(PlayedSquares[i-1]!==null){
+              nextSquare=i+1;
               }
               else{
-                  n=i-1;
+                  nextSquare=i-1;
               }
             }
-            if (nextSquares[n]==null)
+            if (nextSquares[nextSquare]==null)
             {
-              ValidMoves.add(n);
+              console.log("openNewMove "+nextSquare);
+              ValidMoves.add(nextSquare);
             }
+          ValidMoves.delete(i);
+          console.log("ValidMoves ",ValidMoves);
+
+
+          onPlay(nextSquares,1);
             const move = new Audio('move.mp3');
             // Play the audio
             move.play();    
-      /*  if (nextSquares[n]==null){
+      /* if (nextSquares[n]==null){
         nextSquares[n]="Valid";
         await sleep(300);
         nextSquares[n]=null;
         onPlay(nextSquares,1); 
         }*/
     }
-    else{
+
+    else if (squares[i]==null){
         console.log("Invalid Square!!,Please try again");
         const wrongSound = new Audio('wrong.mp3');
         // Play the audio
@@ -128,7 +200,6 @@ function Board({ player1Turn, squares, onPlay }) {
         nextSquares[i]=null;
         onPlay(nextSquares,0); 
     }
-    player1Turn=!player1Turn;
   }
   let st="status";
   const winner = calculateWinner(PlayedSquares,player1Turn);
@@ -149,16 +220,17 @@ function Board({ player1Turn, squares, onPlay }) {
         win.play();
         console.log("Finish Game");
         st="status Finish";
-
       }
   }
    else {
-    status = 'Next player: ' + (player1Turn ? players[0]: players[1]);
+    status = 'Next player: ' + (player1Turn ? players[0] : players[1]);
   }
+
 let DisplayBoard=[];
 for (let i = 0; i < 64; i++) {
   DisplayBoard.push(<Square value={squares[i]} onSquareClick={() => handleClick(i)} />);
 }
+
 return  (
   <>
   <div className={st}>{status}</div>;
@@ -167,6 +239,7 @@ return  (
         </div>
         </>
   );
+
 }
 
 let App = function Game() {
@@ -175,17 +248,7 @@ let App = function Game() {
   const player1Turn = currentMove % 2 === 0;
   const currentSquares = history[currentMove];
 
-
   function handlePlay(nextSquares,num) {
-    if (players[1]=="Computer" ){
-      console.log("Computer Turn");
-      const validMovesArray = Array.from(ValidMoves);
-      nextSquares[validMovesArray[0]]="White";
-      ValidMoves.delete(validMovesArray[0]);
-      const nextHistory = [...history.slice(0, currentMove +1), nextSquares];
-      setHistory(nextHistory);
-      setCurrentMove(nextHistory.length - 1);
-    }
     if(num==1){//valid move
       const nextHistory = [...history.slice(0, currentMove +1), nextSquares];
       setHistory(nextHistory);
@@ -195,19 +258,12 @@ let App = function Game() {
       const nextHistory = [...history.slice(0, currentMove), nextSquares];
       setHistory(nextHistory);
     }
-    
   }
-
   return (
     <div className="game">
         <Board player1Turn={player1Turn} squares={currentSquares} onPlay={handlePlay}/>
     </div>
   );
-
-
-}
-function PlayComputer(currentSquares){
-
 }
 
 function calculateWinner(PlayedSquares,player1Turn) {
@@ -229,23 +285,23 @@ WinnerPlayer=players[0];
     
     //These are the horizontal cases
     if (PlayedSquares[j] && PlayedSquares[j] === PlayedSquares[j+1] && PlayedSquares[j] === PlayedSquares[j+2] && PlayedSquares[j] === PlayedSquares[j+3] && PlayedSquares[j] === PlayedSquares[j+4]) {
-      return WinnerPlayer
+      return WinnerPlayer;
     }
     //These are the vertical cases
      if (PlayedSquares[v] && PlayedSquares[v] === PlayedSquares[v+8] && PlayedSquares[v] === PlayedSquares[v+16] && PlayedSquares[v] === PlayedSquares[v+24] && PlayedSquares[v] === PlayedSquares[v+32]) {
-      return WinnerPlayer
+      return WinnerPlayer;
     }
     
     //These are the diagonal cases
        if (d1<28){
           if (PlayedSquares[d1] && PlayedSquares[d1] === PlayedSquares[d1+9] && PlayedSquares[d1] === PlayedSquares[d1+18] && PlayedSquares[d1] === PlayedSquares[d1+27] && PlayedSquares[d1] === PlayedSquares[d1+36]) {
-            return WinnerPlayer
+            return WinnerPlayer;
         }
       }
       
        if (d2<32){
         if (PlayedSquares[d2] && PlayedSquares[d2] === PlayedSquares[d2+7] && PlayedSquares[d2] === PlayedSquares[d2+14] && PlayedSquares[d2] === PlayedSquares[d2+21] && PlayedSquares[d2] === PlayedSquares[d2+28]) {
-          return WinnerPlayer
+          return WinnerPlayer;
 
       }
     }
@@ -268,6 +324,7 @@ WinnerPlayer=players[0];
 }
 
 function generateBoard(){
+PlayerTurn=players[0];
 const root = createRoot(document.getElementById('root'));
 root.render(
   <StrictMode>
@@ -300,6 +357,8 @@ function chooseBlackOrWhite(){
   }
   function generateBoard2() {
     players=["Computer","Player"];
+    ColorPlayer1="White";
+    ColorPlayer2="Black";
     generateBoard();
   }
   let generateBtn1 = document.getElementById("chosenBlack");
