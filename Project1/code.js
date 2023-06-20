@@ -22,8 +22,6 @@ function Square({ value, onSquareClick}) {
 }
 
 
-
-
 const ValidMoves=new Set([0,8,16,24,32,40,48,56,7,15,23,31,39,47,55,63]);
 const PlayedSquares=Array(64).fill(null);
 let players=["player1","player2"];//default value for 2 players game (player1 vs player2)
@@ -108,13 +106,7 @@ function Board({ player1Turn, squares, onPlay }) {
             // Play the audio
             move.play();    
 
-        //turn on green color for the next valid moves
-       /*if (nextSquares[nextSquare]==null){
-        nextSquares[nextSquare]="Valid";
-        await sleep(300);
-        nextSquares[nextSquare]=null;
-        onPlay(nextSquares,1); 
-        }*/
+    
     }
 
     else if (squares[i]==null){
@@ -351,40 +343,7 @@ function OneOrTwoPlayers(){
 }
 
 
-function osaid(squares, currentPlayer) {
 
-  const isMaximizingPlayer = currentPlayer === "Computer";
-  let bestScore = isMaximizingPlayer ? -Infinity : Infinity;
-  let bestMove;
-
-  for (let i = 0; i < ValidMoves.size; i++) {
-    const move = ValidMoves[i];
-
-    // Simulate the move by assigning the player's color to the square
-    squares[move] = currentPlayer === "Computer" ? ColorPlayer2 : ColorPlayer1;
-
-    if (calculateWinner(squares, !isMaximizingPlayer) || !squares.includes(null)) {
-      // The game is over or there are no more available moves
-      const score = evaluateScore(squares);
-      if ((isMaximizingPlayer && score > bestScore) || (!isMaximizingPlayer && score < bestScore)) {
-        bestScore = score;
-        bestMove = move;
-      }
-    } else {
-      // Recursively call minimax for the next player's turn
-      const score = minimax(squares, isMaximizingPlayer ? "Player" : "Computer");
-      if ((isMaximizingPlayer && score > bestScore) || (!isMaximizingPlayer && score < bestScore)) {
-        bestScore = score;
-        bestMove = move;
-      }
-    }
-
-    // Undo the simulated move
-    squares[move] = null;
-  }
-
-  return bestMove;
-}
 
 function evaluatePotentialWins(squares, player, opponent) {
   let score = 0;
