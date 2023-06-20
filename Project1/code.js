@@ -401,7 +401,7 @@ function evaluatePotentialWins(squares, player, opponent) {
     } 
   }
 
-  onsole.log("evaluate score "+score);
+  console.log("evaluate score "+score);
   return score;
 }
 
@@ -413,7 +413,7 @@ function bestMove(squares, currentPlayer) {
   for (let i = 0; i < ValidMoves.size; i++) {
     const m = validMovesArray[i];
     squares[m] = ColorPlayer2;
-    let score = minimax(squares, 0, false, ColorPlayer2, ColorPlayer1);
+    let score = minimax(squares, 3, false, ColorPlayer2, ColorPlayer1);
     
     squares[m] = null;
     if (score > bestScore) {
@@ -435,7 +435,7 @@ function minimax(squares, depth, isMaximizing, player, opponent) {
       return -1000;
     }
   }
- if (depth == 0) {
+ if (depth == 0 ||depth == 1 || depth==2 || depth==3) {
     return evaluatePotentialWins(squares, player, opponent);
   }
 
@@ -447,6 +447,8 @@ function minimax(squares, depth, isMaximizing, player, opponent) {
       const move = validMovesArray[i];
       squares[move] = ColorPlayer2;
       let score = minimax(squares, depth - 1, false);
+      console.log("score "+score);
+      console.log("bestScore "+bestScore); 
       squares[move] = null;
       bestScore = Math.max(score, bestScore);
     }
