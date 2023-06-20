@@ -324,68 +324,6 @@ function chooseBlackOrWhite(){
   generateBtn2.addEventListener("click", generateBoard2);
 }
 
-
-//screen of one or two players
-function OneOrTwoPlayers(){
-  let pairsContainer = document.getElementById("root");
-  let pairElement1 = document.createElement("button");
-  pairElement1.classList.add("generate-btn");
-  pairElement1.id="vs Friends";
-  pairElement1.innerHTML = "play vs Friends";
-
-  let pairElement2 = document.createElement("button");
-  pairElement2.classList.add("generate-btn");
-  pairElement2.id="vs Computer";
-  pairElement2.innerHTML = "play vs Computer";
-  while (pairsContainer.firstChild) {
-    pairsContainer.removeChild(pairsContainer.firstChild);
-  }
-    pairsContainer.appendChild(pairElement1);
-  pairsContainer.appendChild(pairElement2);
-
-
-  let generateBtn1 = document.getElementById("vs Friends");
-  generateBtn1.addEventListener("click", generateBoard);
-  let generateBtn2 = document.getElementById("vs Computer");
-  generateBtn2.addEventListener("click", chooseBlackOrWhite);
-}
-
-
-function osaid(squares, currentPlayer) {
-
-  const isMaximizingPlayer = currentPlayer === "Computer";
-  let bestScore = isMaximizingPlayer ? -Infinity : Infinity;
-  let bestMove;
-
-  for (let i = 0; i < ValidMoves.size; i++) {
-    const move = ValidMoves[i];
-
-    // Simulate the move by assigning the player's color to the square
-    squares[move] = currentPlayer === "Computer" ? ColorPlayer2 : ColorPlayer1;
-
-    if (calculateWinner(squares, !isMaximizingPlayer) || !squares.includes(null)) {
-      // The game is over or there are no more available moves
-      const score = evaluateScore(squares);
-      if ((isMaximizingPlayer && score > bestScore) || (!isMaximizingPlayer && score < bestScore)) {
-        bestScore = score;
-        bestMove = move;
-      }
-    } else {
-      // Recursively call minimax for the next player's turn
-      const score = minimax(squares, isMaximizingPlayer ? "Player" : "Computer");
-      if ((isMaximizingPlayer && score > bestScore) || (!isMaximizingPlayer && score < bestScore)) {
-        bestScore = score;
-        bestMove = move;
-      }
-    }
-
-    // Undo the simulated move
-    squares[move] = null;
-  }
-
-  return bestMove;
-}
-
 function evaluatePotentialWins(squares, player, opponent) {
   let score = 0;
   let winningCombinations=[
@@ -491,9 +429,9 @@ function minimax(squares, depth, isMaximizing, player, opponent) {
     if (winner == "Draw") {
       return 0;
     } else if (winner == "Computer") {
-      return 100;
+      return 1000;
     } else {
-      return -100;
+      return -1000;
     }
   }
  if (depth == 0) {
@@ -529,5 +467,7 @@ function minimax(squares, depth, isMaximizing, player, opponent) {
 
 
 //start the program
-let generateBtn = document.getElementById("PlayGame");
-generateBtn.addEventListener("click", OneOrTwoPlayers);
+let generateBtn1 = document.getElementById("vs Friends");
+generateBtn1.addEventListener("click", generateBoard);
+let generateBtn2 = document.getElementById("vs Computer");
+generateBtn2.addEventListener("click", chooseBlackOrWhite);
