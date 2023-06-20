@@ -456,9 +456,10 @@ function evaluatePotentialWins(squares, player, opponent) {
       // Potential two-in-a-row for opponent
       score -= 1;
     } 
-
-
     
+
+
+
   }
 
   console.log("evaluate score "+score);
@@ -486,7 +487,7 @@ function bestMove(squares, currentPlayer) {
 
 function minimax(squares, depth, isMaximizing, player, opponent) {
   const winner = calculateWinner(squares, PlayerTurn);
- /* if (winner) {
+  if (winner) {
     if (winner == "Draw") {
       return 0;
     } else if (winner == "Computer") {
@@ -494,7 +495,7 @@ function minimax(squares, depth, isMaximizing, player, opponent) {
     } else {
       return -100;
     }
-  }*/
+  }
  if (depth == 0) {
     return evaluatePotentialWins(squares, player, opponent);
   }
