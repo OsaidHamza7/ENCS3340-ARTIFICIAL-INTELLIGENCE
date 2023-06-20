@@ -3,15 +3,20 @@ import React, { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 
 import { useState } from 'react';
+
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+
+
+
+
 function Square({ value, onSquareClick}) {
   let t="tile "+value+"tile";
   return (
-    <button className="square" onClick={onSquareClick}>
-      <div className={t}></div>
+    <button className="square" onClick={onSquareClick}  >
+      <div className={t} ></div>
     </button>
   );
 }
@@ -153,9 +158,9 @@ function Board({ player1Turn, squares, onPlay }) {
   if (PlayerTurn=="Computer"){
     const nextSquares = squares.slice();
     console.log("Computer Turn");
-    let  validMovesArray = Array.from(ValidMoves);
-    let j= minimax(nextSquares,PlayerTurn);
-    console.log("j after minmax"+j);
+    //let  validMovesArray = Array.from(ValidMoves);
+    let j= bestMove(nextSquares,PlayerTurn);
+    console.log("j after minmax "+j);
     nextSquares[j]=ColorPlayer2;
     PlayedSquares[j]=ColorPlayer2;
     openNewMove(j,nextSquares);
@@ -165,7 +170,7 @@ function Board({ player1Turn, squares, onPlay }) {
   }
 let DisplayBoard=[];
 for (let i = 0; i < 64; i++) {
-  DisplayBoard.push(<Square value={squares[i]} onSquareClick={() => handleClick(i)} />);
+  DisplayBoard.push(<Square key ={i} value={squares[i]} onSquareClick={() => handleClick(i)}/>);
 }
 
 return  (
@@ -207,13 +212,9 @@ function calculateWinner(PlayedSquares,player1Turn) {
   if (PlayedSquares.includes(null)===false){
     return "Draw";
     }
-    let WinnerPlayer;
-if (player1Turn){
-  WinnerPlayer=players[1];
-} 
-else{
-WinnerPlayer=players[0];
-}
+
+    let WinnerPlayer=PlayerTurn;
+
   let j=0;
   let d1=0;
   let d2=4;
@@ -330,158 +331,164 @@ function OneOrTwoPlayers(){
   generateBtn2.addEventListener("click", chooseBlackOrWhite);
 }
 
-// function to minimax algorithm to find the best move
-function minimax(newBoard, player){
-  //available spots
-  console.log("availSpots ",ValidMoves);
-  // an array to collect all the objects
-  var moves = [];
+
+function osaid(squares, currentPlayer) {
+
+  const isMaximizingPlayer = currentPlayer === "Computer";
+  let bestScore = isMaximizingPlayer ? -Infinity : Infinity;
+  let bestMove;
+
+  for (let i = 0; i < ValidMoves.size; i++) {
+    const move = ValidMoves[i];
+
+    // Simulate the move by assigning the player's color to the square
+    squares[move] = currentPlayer === "Computer" ? ColorPlayer2 : ColorPlayer1;
+
+    if (calculateWinner(squares, !isMaximizingPlayer) || !squares.includes(null)) {
+      // The game is over or there are no more available moves
+      const score = evaluateScore(squares);
+      if ((isMaximizingPlayer && score > bestScore) || (!isMaximizingPlayer && score < bestScore)) {
+        bestScore = score;
+        bestMove = move;
+      }
+    } else {
+      // Recursively call minimax for the next player's turn
+      const score = minimax(squares, isMaximizingPlayer ? "Player" : "Computer");
+      if ((isMaximizingPlayer && score > bestScore) || (!isMaximizingPlayer && score < bestScore)) {
+        bestScore = score;
+        bestMove = move;
+      }
+    }
+
+    // Undo the simulated move
+    squares[move] = null;
+  }
+
+  return bestMove;
+}
+
+function evaluatePotentialWins(squares, player, opponent) {
+  const winningCombinations = [
+    // Horizontal cases
+    [0, 1, 2, 3, 4], [1, 2, 3, 4, 5], [2, 3, 4, 5, 6], [3, 4, 5, 6, 7],
+    [8, 9, 10, 11, 12], [9, 10, 11, 12, 13], [10, 11, 12, 13, 14], [11, 12, 13, 14, 15],
+    [16, 17, 18, 19, 20], [17, 18, 19, 20, 21], [18, 19, 20, 21, 22], [19, 20, 21, 22, 23],
+    [24, 25, 26, 27, 28], [25, 26, 27, 28, 29], [26, 27, 28, 29, 30], [27, 28, 29, 30, 31],
+    [32, 33, 34, 35, 36], [33, 34, 35, 36, 37], [34, 35, 36, 37, 38], [35, 36, 37, 38, 39],
+    [40, 41, 42, 43, 44], [41, 42, 43, 44, 45], [42, 43, 44, 45, 46], [43, 44, 45, 46, 47],
+    [48, 49, 50, 51, 52], [49, 50, 51, 52, 53], [50, 51, 52, 53, 54], [51, 52, 53, 54, 55],
+    [56, 57, 58, 59, 60], [57, 58, 59, 60, 61], [58, 59, 60, 61, 62], [59, 60, 61, 62, 63],
+
+    // Vertical cases
+    [0, 8, 16, 24, 32], [8, 16, 24, 32, 40], [16, 24, 32, 40, 48], [24, 32, 40, 48, 56],
+    [1, 9, 17, 25, 33], [9, 17, 25, 33, 41], [17, 25, 33, 41, 49], [25, 33, 41, 49, 57],
+    [2, 10, 18, 26, 34], [10, 18, 26, 34, 42], [18, 26, 34, 42, 50], [26, 34, 42, 50, 58],
+    [3, 11, 19, 27, 35], [11, 19, 27, 35, 43], [19, 27, 35, 43, 51], [27, 35, 43, 51, 59],
+    [4, 12, 20, 28, 36], [12, 20, 28, 36, 44], [20, 28, 36, 44, 52], [28, 36, 44, 52, 60],
+    [5, 13, 21, 29, 37], [13, 21, 29, 37, 45], [21, 29, 37, 45, 53], [29, 37, 45, 53, 61],
+    [6, 14, 22, 30, 38], [14, 22, 30, 38, 46], [22, 30, 38, 46, 54], [30, 38, 46, 54, 62],
+    [7, 15, 23, 31, 39], [15, 23, 31, 39, 47], [23, 31, 39, 47, 55], [31, 39, 47, 55, 63],
+
+    // Diagonal cases
+    [0, 9, 18, 27, 36], [1, 10, 19, 28, 37], [2, 11, 20, 29, 38], [3, 12, 21, 30, 39],
+    [8, 17, 26, 35, 44], [9, 18, 27, 36, 45], [10, 19, 28, 37, 46], [11, 20, 29, 38, 47],
+    [16, 25, 34, 43, 52], [17, 26, 35, 44, 53], [18, 27, 36, 45, 54], [19, 28, 37, 46, 55],
+    [24, 33, 42, 51, 60], [25, 34, 43, 52, 61], [26, 35, 44, 53, 62], [27, 36, 45, 54, 63],
+    [4, 11, 18, 25, 32], [5, 12, 19, 26, 33], [6, 13, 20, 27, 34], [7, 14, 21, 28, 35],
+    [12, 19, 26, 33, 40], [13, 20, 27, 34, 41], [14, 21, 28, 35, 42], [15, 22, 29, 36, 43],
+    [20, 27, 34, 41, 48], [21, 28, 35, 42, 49], [22, 29, 36, 43, 50], [23, 30, 37, 44, 51],
+    [28, 35, 42, 49, 56], [29, 36, 43, 50, 57], [30, 37, 44, 51, 58], [31, 38, 45, 52, 59]
+  ];
+
+  let score = 0;
+
+  for (const combination of winningCombinations) {
+    const squaresSubset = combination.map((index) => squares[index]);
+
+    const playerCount = squaresSubset.filter((square) => square === player).length;
+    const opponentCount = squaresSubset.filter((square) => square === opponent).length;
+    const emptyCount = squaresSubset.filter((square) => square === null).length;
+
+    if (playerCount === 4 && emptyCount === 1) {
+      // Potential win for AI player
+      score += 50;
+    } else if (opponentCount === 4 && emptyCount === 1) {
+      // Potential win for opponent
+      score -= 40;
+    } else if (playerCount === 3 && emptyCount === 2) {
+      // Potential two-in-a-row for AI player
+      score += 10;
+    } else if (opponentCount === 3 && emptyCount === 2) {
+      // Potential two-in-a-row for opponent
+      score -= 9;
+    }
+  }
+
+  console.log("evaluate score "+score);
+  return score;
+}
+
+
+
+
+
+function bestMove(squares, currentPlayer) {
+  // AI to make its turn
+  let bestScore = -Infinity;
+  let move;
   const validMovesArray = Array.from(ValidMoves);
-  console.log("length ",ValidMoves.size);
-  // loop through available spots
-  for (var i = 0; i <ValidMoves.size; i++){
-      //create an object for each and store the index of that spot that was stored as a number in the object's index key
-      var move = {};
-      move.index = newBoard[validMovesArray[i]];
-
-      // set the empty spot to the current player
-      newBoard[validMovesArray[i]] = "White";
-      console.log("newBoard ",newBoard);
-      console.log("player ",player);
-      console.log("availSpots[i] ",validMovesArray[i]);
-      console.log("move.index ",move.index);
-      
-      //if collect the score resulted from calling minimax on the opponent of the current player
-      if (player == "Computer"){
-          console.log("minmax");
-          var result = minimax(newBoard, "Player");
-          move.score = result.score;
-      }
-      else{
-        console.log("alphabeta");
-          var result = minimax(newBoard, "Computer");
-          move.score = result.score;
-      }
-
-      //reset the spot to empty
-      newBoard[validMovesArray[i]] = move.index;
-
-      // push the object to the array
-      moves.push(move);
+  for (let i = 0; i < ValidMoves.size; i++) {
+    const m = validMovesArray[i];
+    squares[m] = ColorPlayer2;
+    let score = minimax(squares, 3, false, currentPlayer, currentPlayer === ColorPlayer1 ? ColorPlayer2 : ColorPlayer1);
+    squares[m] = null;
+    if (score > bestScore) {
+      bestScore = score;
+      move = m;
+    }
   }
-
-  // if it is the computer's turn loop over the moves and choose the move with the highest score
-  console.log("hi");
-  var bestMove;
-  if(player === "Computer"){
-      var bestScore = -10000;
-      for(var i = 0; i < moves.length; i++){
-          if(moves[i].score > bestScore){
-              bestScore = moves[i].score;
-              bestMove = i;
-          }
-      }
-  }else{
-
-  // else loop over the moves and choose the move with the lowest score
-      var bestScore = 10000;
-      for(var i = 0; i < moves.length; i++){
-          if(moves[i].score < bestScore){
-              bestScore = moves[i].score;
-              bestMove = i;
-          }
-      }
-  }
-
-  // return the chosen move (object) from the array to the higher depth
-  return moves[bestMove];
+  return move;
 }
 
-// function for alpha beta pruning algorithm to find the best move
-function alphabeta(newBoard, player, alpha, beta){
-  //available spots
-  var availSpots = emptySquares(newBoard);
-
-  // checks for the terminal states such as win, lose, and tie and returning a value accordingly
-  if (checkWin(newBoard, player)){
-      return {score:-10};
+function minimax(squares, depth, isMaximizing, player, opponent) {
+  const winner = calculateWinner(squares, PlayerTurn);
+  if (winner) {
+    if (winner == "Draw") {
+      return 0;
+    } else if (winner == "Computer") {
+      return 1000;
+    } else {
+      return -1000;
+    }
   }
-  else if (checkWin(newBoard, aiPlayer)){
-      return {score:10};
-  }
-  else if (availSpots.length === 0){
-      return {score:0};
-  }
-
-  // an array to collect all the objects
-  var moves = [];
-
-  // loop through available spots
-  for (var i = 0; i < availSpots.length; i++){
-      //create an object for each and store the index of that spot that was stored as a number in the object's index key
-      var move = {};
-      move.index = newBoard[availSpots[i]];
-      
-      // set the empty spot to the current player
-      newBoard[availSpots[i]] = player;
-
-      //if collect the score resulted from calling alphabeta on the opponent of the current player
-      if (player == aiPlayer){
-
-          var result = alphabeta(newBoard, huPlayer, alpha, beta);
-          move.score = result.score;
-          if(move.score > alpha){
-            alpha = move.score;
-          }
-      }
-      else{
-          var result = alphabeta(newBoard, aiPlayer, alpha, beta);
-          move.score = result.score;
-          if(move.score < beta){
-            beta = move.score;
-          }
-      }
-      
-      //reset the spot to empty
-      newBoard[availSpots[i]] = move.index;
-
-      // push the object to the array
-      moves.push(move);
-
-      if(alpha >= beta){
-        break;
-      }
+else if (depth == 0) {
+    return evaluatePotentialWins(squares, player, opponent);
   }
 
-  // if it is the computer's turn loop over the moves and choose the move with the highest score
-  var bestMove;
-  if(player === aiPlayer){
-      var bestScore = -10000;
-      for(var i = 0; i < moves.length; i++){
-          if(moves[i].score > bestScore){
-              bestScore = moves[i].score;
-              bestMove = i;
-          }
-      }
-  }else{
-    
-  // else loop over the moves and choose the move with the lowest score
-      var bestScore = 10000;
-      for(var i = 0; i < moves.length; i++){
-          if(moves[i].score < bestScore){
-              bestScore = moves[i].score;
-              bestMove = i;
-          }
-      }
-  }
+  const validMovesArray = Array.from(ValidMoves);
 
-  // return the chosen move (object) from the array to the higher depth
-  return moves[bestMove];
+  if (isMaximizing) {
+    let bestScore = -Infinity;
+    for (let i = 0; i < ValidMoves.size; i++) {
+      const move = validMovesArray[i];
+      squares[move] = ColorPlayer2;
+      let score = minimax(squares, depth - 1, false);
+      squares[move] = null;
+      bestScore = Math.max(score, bestScore);
+    }
+    return bestScore;
+  } else {
+    let bestScore = Infinity;
+    for (let i = 0; i < validMovesArray.length; i++) {
+      const move = validMovesArray[i];
+      squares[move] = ColorPlayer1;
+      let score = minimax(squares, depth -1, true);
+      squares[move] = null;
+      bestScore = Math.min(score, bestScore);
+    }
+    return bestScore;
+  }
 }
-
-
-
-
 
 
 
