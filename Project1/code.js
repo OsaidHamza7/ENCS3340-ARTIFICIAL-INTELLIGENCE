@@ -17,46 +17,7 @@ function Square({ value, onSquareClick}) {
 }
 
 
-function minmax2(squares,depth,Turn){
-  let winner = calculateWinner(squares);
-  if (winner) {
-    if (winner=="Draw") {
-      return 0;
-    }
-    else if (winner) {
-      if (winner=="Black") {
-        return 10-depth;
-      }
-      else{
-        return depth-10;
-      }
-    }
-  }
-  else{
-    if (Turn) {
-      let best=-100;
-      for (let i = 0; i < 64; i++) {
-        if (squares[i]==null) {
-          squares[i]="Black";
-          best=Math.max(best,minmax(squares,depth+1,!Turn));
-          squares[i]=null;
-        }
-      }
-      return best;
-    }
-    else{
-      let best=100;
-      for (let i = 0; i < 64; i++) {
-        if (squares[i]==null) {
-          squares[i]="White";
-          best=Math.min(best,minmax(squares,depth+1,!Turn));
-          squares[i]=null;
-        }
-      }
-      return best;
-    }
-  }
-}
+
 
 const ValidMoves=new Set([0,8,16,24,32,40,48,56,7,15,23,31,39,47,55,63]);
 const PlayedSquares=Array(64).fill(null);
@@ -67,56 +28,47 @@ let ColorPlayer2="White";
 
 
 
-function openNewMove(i,squares){
   
+
+
+function openNewMove(j,nextSquares){
+  let nextSquare;
+  console.log("j "+j);
+  if(j==0){
+    nextSquare=1;
+}
+else if(j==63){
+    nextSquare=62;
+}
+else{
+  if (j%8==0){
+    nextSquare=j+1;
+  }
+  else if (j%8==7){
+    nextSquare=j-1;
+  }
+  else if(PlayedSquares[j-1]!==null){
+    nextSquare=j+1;
+    }
+    else{
+        nextSquare=j-1;
+    }
+  }
+  if (nextSquares[nextSquare]==null)
+  {
+    ValidMoves.add(nextSquare);
+    console.log("openNewMove "+nextSquare);
+  }
+  ValidMoves.delete(j);
+  console.log("ValidMoves ",ValidMoves);
+  const move = new Audio('move.mp3');
+  // Play the audio
+  move.play(); 
 }
 
 function Board({ player1Turn, squares, onPlay }) {
 
-  if (PlayerTurn=="Computer"){
-    const nextSquares = squares.slice();
-    console.log("Computer Turn");
-    let  validMovesArray = Array.from(ValidMoves);
-    let j=validMovesArray[0];
 
-    nextSquares[j]=ColorPlayer2;
-    PlayedSquares[j]=ColorPlayer2;
-    let nextSquare;
-    console.log("j "+j);
-    if(j==0){
-      nextSquare=1;
-  }
-  else if(j==63){
-      nextSquare=62;
-  }
-  else{
-    if (j%8==0){
-      nextSquare=j+1;
-    }
-    else if (j%8==7){
-      nextSquare=j-1;
-    }
-    else if(PlayedSquares[j-1]!==null){
-      nextSquare=j+1;
-      }
-      else{
-          nextSquare=j-1;
-      }
-    }
-    if (nextSquares[nextSquare]==null)
-    {
-      ValidMoves.add(nextSquare);
-      console.log("openNewMove with computer "+nextSquare);
-    }
-    ValidMoves.delete(j);
-    console.log("ValidMoves ",ValidMoves);
-    onPlay(nextSquares,1);
-    PlayerTurn="Player";
-    player1Turn=!player1Turn;
-    const move = new Audio('move.mp3');
-    // Play the audio
-    move.play();  
-  }
   async function handleClick(i) {
     console.log("clicked on square "+i);
     console.log("PlayerTurn "+PlayerTurn);  
@@ -128,7 +80,7 @@ function Board({ player1Turn, squares, onPlay }) {
         return;
         }
         const nextSquares = squares.slice();
-        let n;
+
         if (PlayerTurn=="Player"){
           nextSquares[i] = ColorPlayer1;
           PlayedSquares[i] = ColorPlayer1;
@@ -145,45 +97,17 @@ function Board({ player1Turn, squares, onPlay }) {
           PlayerTurn= players[0];
           } 
           player1Turn=!player1Turn;
-          let nextSquare;
-
-            if(i==0){
-              nextSquare=1;
-          }
-          else if(i==63){
-              nextSquare=62;
-          }
-          else{
-            if (i%8==0){
-              nextSquare=i+1;
-            }
-            else if (i%8==7){
-              nextSquare=i-1;
-            }
-            else if(PlayedSquares[i-1]!==null){
-              nextSquare=i+1;
-              }
-              else{
-                  nextSquare=i-1;
-              }
-            }
-            if (nextSquares[nextSquare]==null)
-            {
-              console.log("openNewMove "+nextSquare);
-              ValidMoves.add(nextSquare);
-            }
-          ValidMoves.delete(i);
-          console.log("ValidMoves ",ValidMoves);
-
-
+          openNewMove(i,nextSquares);
           onPlay(nextSquares,1);
             const move = new Audio('move.mp3');
             // Play the audio
             move.play();    
-      /* if (nextSquares[n]==null){
-        nextSquares[n]="Valid";
+
+        //turn on green color for the next valid moves
+       /*if (nextSquares[nextSquare]==null){
+        nextSquares[nextSquare]="Valid";
         await sleep(300);
-        nextSquares[n]=null;
+        nextSquares[nextSquare]=null;
         onPlay(nextSquares,1); 
         }*/
     }
@@ -226,6 +150,19 @@ function Board({ player1Turn, squares, onPlay }) {
     status = 'Next player: ' + (player1Turn ? players[0] : players[1]);
   }
 
+  if (PlayerTurn=="Computer"){
+    const nextSquares = squares.slice();
+    console.log("Computer Turn");
+    let  validMovesArray = Array.from(ValidMoves);
+    let j= minimax(nextSquares,PlayerTurn);
+    console.log("j after minmax"+j);
+    nextSquares[j]=ColorPlayer2;
+    PlayedSquares[j]=ColorPlayer2;
+    openNewMove(j,nextSquares);
+    player1Turn=!player1Turn; 
+    onPlay(nextSquares,1);
+    PlayerTurn="Player";
+  }
 let DisplayBoard=[];
 for (let i = 0; i < 64; i++) {
   DisplayBoard.push(<Square value={squares[i]} onSquareClick={() => handleClick(i)} />);
@@ -396,51 +333,47 @@ function OneOrTwoPlayers(){
 // function to minimax algorithm to find the best move
 function minimax(newBoard, player){
   //available spots
-  var availSpots = emptySquares(newBoard);
-
-  // checks for the terminal states such as win, lose, and tie and returning a value accordingly
-  if (checkWin(newBoard, player)){
-      return {score:-10};
-  }
-  else if (checkWin(newBoard, aiPlayer)){
-      return {score:10};
-  }
-  else if (availSpots.length === 0){
-      return {score:0};
-  }
-
+  console.log("availSpots ",ValidMoves);
   // an array to collect all the objects
   var moves = [];
-
+  const validMovesArray = Array.from(ValidMoves);
+  console.log("length ",ValidMoves.size);
   // loop through available spots
-  for (var i = 0; i < availSpots.length; i++){
+  for (var i = 0; i <ValidMoves.size; i++){
       //create an object for each and store the index of that spot that was stored as a number in the object's index key
       var move = {};
-      move.index = newBoard[availSpots[i]];
+      move.index = newBoard[validMovesArray[i]];
 
       // set the empty spot to the current player
-      newBoard[availSpots[i]] = player;
-
+      newBoard[validMovesArray[i]] = "White";
+      console.log("newBoard ",newBoard);
+      console.log("player ",player);
+      console.log("availSpots[i] ",validMovesArray[i]);
+      console.log("move.index ",move.index);
+      
       //if collect the score resulted from calling minimax on the opponent of the current player
-      if (player == aiPlayer){
-          var result = minimax(newBoard, huPlayer);
+      if (player == "Computer"){
+          console.log("minmax");
+          var result = minimax(newBoard, "Player");
           move.score = result.score;
       }
       else{
-          var result = minimax(newBoard, aiPlayer);
+        console.log("alphabeta");
+          var result = minimax(newBoard, "Computer");
           move.score = result.score;
       }
 
       //reset the spot to empty
-      newBoard[availSpots[i]] = move.index;
+      newBoard[validMovesArray[i]] = move.index;
 
       // push the object to the array
       moves.push(move);
   }
 
   // if it is the computer's turn loop over the moves and choose the move with the highest score
+  console.log("hi");
   var bestMove;
-  if(player === aiPlayer){
+  if(player === "Computer"){
       var bestScore = -10000;
       for(var i = 0; i < moves.length; i++){
           if(moves[i].score > bestScore){
