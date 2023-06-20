@@ -324,6 +324,11 @@ function chooseBlackOrWhite(){
   generateBtn2.addEventListener("click", generateBoard2);
 }
 
+
+
+
+
+
 function evaluatePotentialWins(squares, player, opponent) {
   let score = 0;
   let winningCombinations=[
@@ -394,13 +399,9 @@ function evaluatePotentialWins(squares, player, opponent) {
       // Potential two-in-a-row for opponent
       score -= 1;
     } 
-    
-
-
-
   }
 
-  console.log("evaluate score "+score);
+  onsole.log("evaluate score "+score);
   return score;
 }
 
@@ -412,7 +413,7 @@ function bestMove(squares, currentPlayer) {
   for (let i = 0; i < ValidMoves.size; i++) {
     const m = validMovesArray[i];
     squares[m] = ColorPlayer2;
-    let score = minimax(squares, 0, false, ColorPlayer2, ColorPlayer1);
+    let score = minimax(squares, 1, false, ColorPlayer2, ColorPlayer1);
     
     squares[m] = null;
     if (score > bestScore) {
