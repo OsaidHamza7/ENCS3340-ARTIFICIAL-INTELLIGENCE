@@ -317,30 +317,6 @@ function chooseBlackOrWhite(){
 }
 
 
-//screen of one or two players
-function OneOrTwoPlayers(){
-  let pairsContainer = document.getElementById("root");
-  let pairElement1 = document.createElement("button");
-  pairElement1.classList.add("generate-btn");
-  pairElement1.id="vs Friends";
-  pairElement1.innerHTML = "play vs Friends";
-
-  let pairElement2 = document.createElement("button");
-  pairElement2.classList.add("generate-btn");
-  pairElement2.id="vs Computer";
-  pairElement2.innerHTML = "play vs Computer";
-  while (pairsContainer.firstChild) {
-    pairsContainer.removeChild(pairsContainer.firstChild);
-  }
-    pairsContainer.appendChild(pairElement1);
-  pairsContainer.appendChild(pairElement2);
-
-
-  let generateBtn1 = document.getElementById("vs Friends");
-  generateBtn1.addEventListener("click", generateBoard);
-  let generateBtn2 = document.getElementById("vs Computer");
-  generateBtn2.addEventListener("click", chooseBlackOrWhite);
-}
 
 
 
@@ -415,13 +391,9 @@ function evaluatePotentialWins(squares, player, opponent) {
       // Potential two-in-a-row for opponent
       score -= 1;
     } 
-    
-
-
-
   }
 
-  console.log("evaluate score "+score);
+  onsole.log("evaluate score "+score);
   return score;
 }
 
@@ -450,9 +422,9 @@ function minimax(squares, depth, isMaximizing, player, opponent) {
     if (winner == "Draw") {
       return 0;
     } else if (winner == "Computer") {
-      return 100;
+      return 1000;
     } else {
-      return -100;
+      return -1000;
     }
   }
  if (depth == 0) {
@@ -488,5 +460,7 @@ function minimax(squares, depth, isMaximizing, player, opponent) {
 
 
 //start the program
-let generateBtn = document.getElementById("PlayGame");
-generateBtn.addEventListener("click", OneOrTwoPlayers);
+let generateBtn1 = document.getElementById("vs Friends");
+generateBtn1.addEventListener("click", generateBoard);
+let generateBtn2 = document.getElementById("vs Computer");
+generateBtn2.addEventListener("click", chooseBlackOrWhite);

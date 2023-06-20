@@ -85,19 +85,76 @@
 					<p>
 						
 						Game On!.</p>
-					<a href="#" class="site-btn">Play Now!  <img src="img/icons/double-arrow.png" alt="#"/></a>
+					<a href="game.html" class="site-btn">Play Now!  <img src="img/icons/double-arrow.png" alt="#"/></a>
 				</div>
 			</div>
 			<div class="hero-item set-bg d-flex align-items-center justify-content-center text-center" data-setbg="img/slider-bg-2.jpg">
-				<div class="container">
-					<h2>Game on!</h2>
-					<p>Fusce erat dui, venenatis et erat in, vulputate dignissim lacus. Donec vitae tempus dolor,<br>sit amet elementum lorem. Ut cursus tempor turpis.</p>
-				</div>
+				<div class="GameInstructions">
+					<h2>Game on!.</h2>
+					<p >
+					  Magnetic Cave is a 2-player adversary game where each player tries to build a “bridge” of 5 magnetic bricks within a
+					  cave whose left and right walls are magnetic.<br>
+					   For the sake of this project, the bricks of one player will be represented
+					  by a ■ and the bricks of the other by a □.    <br>
+					  The version of Magnetic Cave that you will implement will be played on a
+					  regular 8x8 chess board.    <br></p>
+					  
+					  <h3>The rules of the game are simple:   </h3> <br>
+					  <p>
+					  - Initially, the cave (the board) is empty.    <br>
+				  
+					  - Player ■ and player □ move in an alternate fashion, starting with ■. So ■ starts, followed by □, then ■ again,
+					  then □ again, ...    <br>
+				  
+					  - Because there are two big magnets on each side of the cave, a player can only place a brick on an empty cell
+					  of the cave provided that the brick is stacked directly on the left or right wall, or is stacked to the left or the
+					  right of another brick (of any color).    <br>
+				  
+					  - As soon as one player is able to align 5 consecutive bricks in a row, in a column or in a diagonal, then this
+					  <br>
+					  - If no player is able to achieve a winning configuration and the board is full, then the game stops and there is a tie.
+					  The following figures show possible configurations of the game.</p>
+
 			</div>
 		</div>
 	</section>
 	<!-- Hero section end-->
+<!-- Intro section -->
+<section class="intro-section">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-4">
+				<div class="intro-text-box text-box text-white">
+					<div class="top-meta"> <a href="">Magnetic</a> Cave</div>
+					<h3>Play until win! 
+						<br><br>
+					</h3>
+					<img src="winWhite.png" alt="#">
 
+					<p><br>The white player won, because he built a bridge of five diagonal magnetic bricks.</p>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="intro-text-box text-box text-white">
+					<div class="top-meta"> <a href="">Magnetic</a> Cave</div>
+					<h3>Get Warning when invalid move happened</h3>
+					<img src="InvalidMove.png" alt="#">
+
+					<p><br>When a player attempts to make a move to a position on the board that is already occupied by a piece or is outside the boundaries of the board, this is considered an invalid move.</p>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="intro-text-box text-box text-white">
+					<div class="top-meta"> <a href="">Magnetic</a> Cave</div>
+					<h3>Get Draw when all board is Full</h3>
+					<img src="Draw.png" alt="#">
+					<p><br>The draw occurs when all positions on the board are occupied by pieces and neither player has managed to achieve the winning condition (5 pieces in a row horizontally, vertically, or diagonally).</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<!-- Intro section end -->
 
 
 
