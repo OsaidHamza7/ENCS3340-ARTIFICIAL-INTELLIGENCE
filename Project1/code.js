@@ -150,6 +150,19 @@ function Board({ player1Turn, squares, onPlay }) {
         console.log("Finish Game");
         st="status Finish";
       }
+      let DisplayBoard=[];
+      for (let i = 0; i < 64; i++) {
+        DisplayBoard.push(<Square key ={i} value={squares[i]} onSquareClick={() => handleClick(i)}/>);
+      }
+
+      return  (
+        <>
+        <div className={st}>{status}</div>;
+            <div className="board">
+              {DisplayBoard}
+              </div>
+              </>
+        );
   }
    else {
     status = 'Next player: ' + (player1Turn ? players[0] : players[1]);
@@ -414,12 +427,20 @@ function evaluatePotentialWins(squares, player, opponent) {
     const opponentCount = squaresSubset.filter((square) => square === opponent).length;
     const emptyCount = squaresSubset.filter((square) => square === null).length;
 
+    if (playerCount === 5) {
+      // AI player wins
+      score += 100;
+    } else if (opponentCount === 5) {
+      // Opponent wins
+      score -= 90;
+    } else
+
     if (playerCount === 4 && emptyCount === 1) {
       // Potential win for AI player
       score += 50;
     } else if (opponentCount === 4 && emptyCount === 1) {
       // Potential win for opponent
-      score -= 40;
+      score -= 60;
     } else if (playerCount === 3 && emptyCount === 2) {
       // Potential two-in-a-row for AI player
       score += 10;
@@ -427,15 +448,22 @@ function evaluatePotentialWins(squares, player, opponent) {
       // Potential two-in-a-row for opponent
       score -= 9;
     }
+    else if (playerCount === 2 && emptyCount === 3) {
+      // Potential two-in-a-row for AI player
+      score += 2;
+    }
+    else if (opponentCount === 2 && emptyCount === 3) {
+      // Potential two-in-a-row for opponent
+      score -= 1;
+    } 
+
+
+    
   }
 
   console.log("evaluate score "+score);
   return score;
 }
-
-
-
-
 
 function bestMove(squares, currentPlayer) {
   // AI to make its turn
@@ -446,6 +474,7 @@ function bestMove(squares, currentPlayer) {
     const m = validMovesArray[i];
     squares[m] = ColorPlayer2;
     let score = minimax(squares, 0, false, ColorPlayer2, ColorPlayer1);
+    
     squares[m] = null;
     if (score > bestScore) {
       bestScore = score;
@@ -457,7 +486,7 @@ function bestMove(squares, currentPlayer) {
 
 function minimax(squares, depth, isMaximizing, player, opponent) {
   const winner = calculateWinner(squares, PlayerTurn);
-  if (winner) {
+ /* if (winner) {
     if (winner == "Draw") {
       return 0;
     } else if (winner == "Computer") {
@@ -465,8 +494,8 @@ function minimax(squares, depth, isMaximizing, player, opponent) {
     } else {
       return -100;
     }
-  }
-else if (depth == 0) {
+  }*/
+ if (depth == 0) {
     return evaluatePotentialWins(squares, player, opponent);
   }
 
