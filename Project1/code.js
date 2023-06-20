@@ -413,7 +413,7 @@ function bestMove(squares, currentPlayer) {
   for (let i = 0; i < ValidMoves.size; i++) {
     const m = validMovesArray[i];
     squares[m] = ColorPlayer2;
-    let score = minimax(squares, 1, false, ColorPlayer2, ColorPlayer1);
+    let score = minimax(squares, 0, false, ColorPlayer2, ColorPlayer1);
     
     squares[m] = null;
     if (score > bestScore) {
