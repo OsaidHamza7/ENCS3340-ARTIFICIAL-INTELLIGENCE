@@ -22,8 +22,6 @@ function Square({ value, onSquareClick}) {
 }
 
 
-
-
 const ValidMoves=new Set([0,8,16,24,32,40,48,56,7,15,23,31,39,47,55,63]);
 const PlayedSquares=Array(64).fill(null);
 let players=["player1","player2"];//default value for 2 players game (player1 vs player2)
@@ -108,13 +106,7 @@ function Board({ player1Turn, squares, onPlay }) {
             // Play the audio
             move.play();    
 
-        //turn on green color for the next valid moves
-       /*if (nextSquares[nextSquare]==null){
-        nextSquares[nextSquare]="Valid";
-        await sleep(300);
-        nextSquares[nextSquare]=null;
-        onPlay(nextSquares,1); 
-        }*/
+    
     }
 
     else if (squares[i]==null){
