@@ -19,8 +19,8 @@ function Square({ value, onSquareClick}) {
 }
 
 
-const ValidMoves=new Set([0,8,16,24,32,40,48,56,7,15,23,31,39,47,55,63]);
-const PlayedSquares=Array(64).fill(null);
+let ValidMoves=new Set([0,8,16,24,32,40,48,56,7,15,23,31,39,47,55,63]);
+let PlayedSquares=Array(64).fill(null);
 let players=["player1","player2"];//default value for 2 players game (player1 vs player2)
 let PlayerTurn=players[0];
 let ColorPlayer1="Black";
@@ -267,6 +267,8 @@ function calculateWinner(PlayedSquares,player1Turn) {
 }
 
 function generateBoard(){
+ValidMoves=new Set([0,8,16,24,32,40,48,56,7,15,23,31,39,47,55,63]);
+PlayedSquares=Array(64).fill(null);
 PlayerTurn=players[0];
 const root = createRoot(document.getElementById('root'));
 root.render(

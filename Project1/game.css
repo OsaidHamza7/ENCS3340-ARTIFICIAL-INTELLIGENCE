@@ -73,7 +73,7 @@ display: block;
 .game {
   display: grid; 
    place-content: center; 
-   height: 90vh;
+   /*height: 90vh;*/
   }
   .tile.highlight{
     background-color: blue;
