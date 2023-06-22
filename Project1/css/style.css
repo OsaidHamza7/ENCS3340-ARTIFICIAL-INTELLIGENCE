@@ -912,7 +912,7 @@ ol {
 .featured-box {
 	float: right;
 	width: calc(50% + 156px);
-	background: #fff;
+	background: #330d38;
 	padding: 100px 50px 130px 79px;
 }
 

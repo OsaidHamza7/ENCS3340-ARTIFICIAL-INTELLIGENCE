@@ -61,6 +61,7 @@ display: block;
     border-color: black;
     border-style: outset;
     background-color: rgb(203, 144, 85);
+    border-style: solid;
 }
 .square.invalid{
   background-color: #ad2525;
@@ -88,6 +89,7 @@ display: block;
     grid-template-rows: repeat(8,100px);
     width: 800px;
     height: 800px;
+    margin: auto;
 }
 
 #root{
@@ -131,14 +133,14 @@ display: block;
 .status {
   margin-bottom: 0px;
   background-color: white;
-  font-size:35px;
+  font-size:50px;
   height: fit-content;
   text-align: center;
   font-family: "Sofia variant0", Tofu;
 }
 
 .status.Finish{
-  background-color: aqua  ;
+  background-color: greenyellow  ;
 }
 
 .status.Draw{
