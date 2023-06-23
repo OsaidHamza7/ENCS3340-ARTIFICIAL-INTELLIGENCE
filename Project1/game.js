@@ -415,7 +415,7 @@ function bestMove(squares, currentPlayer) {
 
 function minimax(squares, depth, isMaximizing, player, opponent) {
   const winner = calculateWinner(squares, PlayerTurn);
-  if (winner) {
+  /*if (winner) {
     if (winner == "Draw") {
       return 0;
     } else if (winner == "Computer") {
@@ -423,7 +423,7 @@ function minimax(squares, depth, isMaximizing, player, opponent) {
     } else {
       return -1000;
     }
-  }
+  }*/
  if (depth == 0) {
     return evaluatePotentialWins(squares, player, opponent);
   }
