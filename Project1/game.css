@@ -5,12 +5,12 @@ h1 {
   text-align: center;
   background-color: #007bff;
   color: #fff;
-
 }
 
 h2 {
   margin-top: 0;
   font-size: 20px;
+  color: #fff;
 }
 
 h3 {
@@ -51,7 +51,8 @@ display: block;
     background-color: black;
     font-family: "Sofia", sans-serif;
     background-image: image-set("./img/Background/backgroundBoard.jpg");
-}
+    background-size:cover;
+  }
 
 .square {
   display: grid;
@@ -103,6 +104,7 @@ display: block;
 
 #root{
   font-family: "Sofia", sans-serif;
+  
 }
 
 
@@ -156,6 +158,9 @@ display: block;
 .status.Draw{
   background-color: red  ;
 }
+.status.Lose{
+  background-color: red  ;
+}
 .generate-btn{
   display: block;
   margin: 102px auto;
@@ -163,8 +168,185 @@ display: block;
   background-color: #007bff;
   color: #fff;
   border: none;
-  border-radius: 5px;
+  border-radius: 40px;
   font-size: 60px;
   cursor: pointer;
   transition: all 0.3s ease;
+  width: max-content;
 }
+
+
+#css-script-menu {
+  position: absolute;
+  height: 90px;
+  width: 100%;
+  top: 0;
+  left: 0;
+  border-top: 5px solid #16a1e7;
+  background: #fff;
+  -moz-box-shadow: 0 2px 3px 0 rgba(0,0,0,.16);
+  -webkit-box-shadow: 0 2px 3px 0 rgba(0,0,0,.16);
+  box-shadow: 0 2px 3px 0 rgba(0,0,0,.16);
+  z-index: 999999;
+  padding: 10px 0;
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box
+}
+
+.css-script-center {
+  max-width: 960px;
+  margin: 0 auto
+}
+
+.css-script-center ul {
+  width: 212px;
+  float: left;
+  line-height: 45px;
+  margin: 0;
+  padding: 0;
+  list-style: none
+}
+
+.css-script-center a {
+  text-decoration: none
+}
+
+.css-script-ads {
+  max-width: 728px;
+  height: 90px;
+  float: right
+}
+
+.css-script-clear {
+  clear: both;
+  height: 0
+}
+
+#carbonads {
+  font-family: -apple-system,BlinkMacSystemFont,segoe ui,Roboto,Oxygen-Sans,Ubuntu,Cantarell,helvetica neue,Helvetica,Arial,sans-serif
+}
+
+#carbonads {
+  display: block;
+  overflow: hidden;
+  max-width: 728px;
+  position: relative;
+  font-size: 22px;
+  box-sizing: content-box
+}
+
+#carbonads>span {
+  display: block
+}
+
+#carbonads a {
+  color: #111;
+  text-decoration: none
+}
+
+#carbonads a:hover {
+  color: #000
+}
+
+.carbon-wrap {
+  display: flex;
+  align-items: center
+}
+
+.carbon-img {
+  display: block;
+  margin: 0;
+  line-height: 1
+}
+
+.carbon-img img {
+  display: block;
+  height: 90px;
+  width: auto
+}
+
+.carbon-text {
+  display: block;
+  padding: 0 1em;
+  line-height: 1.35;
+  text-align: left
+}
+
+.carbon-poweredby {
+  display: block;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  padding: 6px 10px;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  font-weight: 600;
+  font-size: 8px;
+  border-top-left-radius: 4px;
+  line-height: 1;
+  color: #ccc;
+}
+
+
+@media only screen and (max-width:960px){
+
+.popup{
+  transform: translate(-50%,-121%);
+  width: 82%;
+  height: 23%; 
+}
+.body{
+  background-image: image-set("./img/Background/Cave.jpg");
+}
+
+}
+@media all and (max-width: 900px) {.body{
+  background-image: image-set("./img/Background/Cave.jpg");
+} 
+}
+
+    @media screen and (max-width: 800px) and (orientation: landscape), screen and (max-height: 300px) {
+      .body{
+        background-image: image-set("./img/Background/Cave.jpg");
+      } 
+    }
+
+
+
+
+
+
+.popup{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  background: rgb(0 0 0 / 50%);
+  width: 50%;
+  height: 40%;
+  /* box-shadow: 0 25px 50px rgba(0,0,0,0.1), 0 0 0 1000px rgba(151, 215, 231, 0.95); */
+  /* display: flex; */
+  justify-content: center;
+  align-items: center;
+  padding: 47px;
+  /* background: border-box; */
+  text-align: center;
+  bottom: 50%;
+  top: 50%;
+}
+
+.main-btn{
+  display: block;
+  margin: 30px auto;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 40px;
+  font-size: 60px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: max-content;
+}
+

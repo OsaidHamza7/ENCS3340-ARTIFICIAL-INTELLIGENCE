@@ -117,11 +117,19 @@ function Board({ player1Turn, squares, onPlay }) {
   if (winner) {
       if (winner=="Draw" ) {
         status = 'Draw';
-        const Draw = new Audio('GameOverSound.wav');
+        const Draw = new Audio('./Sounds/GameOverSound.wav');
         // Play the audio
         Draw.play();
         console.log("Finish Game");
         st="status Draw";
+      }
+      else if (winner=="Computer"){
+        status = 'Game Over';
+        const lose = new Audio('./Sounds/GameOverSound.wav');
+        // Play the audio
+        lose.play();
+        console.log("Finish Game");
+        st="status Lose";
       }
       else{
         status = 'Winner: ' + winner;
@@ -142,6 +150,11 @@ function Board({ player1Turn, squares, onPlay }) {
             <div className="board">
               {DisplayBoard}
               </div>
+              <div class="popup">
+                <h2>The winning team is {winner}!</h2>
+                <button class="generate-btn" id="PlayAgain" onClick={generateBoard} >play again</button>
+
+              </div> 
               </>
         );
   }
@@ -173,6 +186,7 @@ return  (
       <div className="board">
         {DisplayBoard}
         </div>
+        
         </>
   );
 
@@ -199,7 +213,6 @@ let App = function Game() {
     
     <div className="game">
         <Board player1Turn={player1Turn} squares={currentSquares} onPlay={handlePlay}/>
-        <button class="generate-btn" id="PlayAgain" onClick={generateBoard}>play again</button>
     </div>
 
 
@@ -274,6 +287,7 @@ const root = createRoot(document.getElementById('root'));
 root.render(
   <StrictMode>
     <App />
+    <button class="generate-btn" id="Back" onClick={choosePlayVsFriendsOrComputer} >Go Back</button>
   </StrictMode>
 );
 }
@@ -299,6 +313,8 @@ function chooseBlackOrWhite(){
   pairsContainer.appendChild(pairElement2);
   function generateBoard1() {
     players=["Player","Computer"];
+    ColorPlayer1="Black";
+    ColorPlayer2="White";
     generateBoard();
   }
   function generateBoard2() {
@@ -314,7 +330,36 @@ function chooseBlackOrWhite(){
 }
 
 
+function choosePlayVsFriendsOrComputer(){
+  let pairsContainer = document.getElementById("root");
+  let pairElement1 = document.createElement("button");
+  pairElement1.classList.add("generate-btn");
+  pairElement1.id="vs Friends";
+  pairElement1.innerHTML = "Play With Friends";
 
+  let pairElement2 = document.createElement("button");
+  pairElement2.classList.add("generate-btn");
+  pairElement2.id="vs Computer";
+  pairElement2.innerHTML = "Play Vs Computer";
+
+  while (pairsContainer.firstChild) {
+    pairsContainer.removeChild(pairsContainer.firstChild);
+  }
+  pairsContainer.appendChild(pairElement1);
+  pairsContainer.appendChild(pairElement2);
+   
+
+  function generateBoard3() {
+    players=["Player1","Player2"];
+    ColorPlayer1="Black";
+    ColorPlayer2="White";
+    generateBoard();
+  }
+  let generateBtn1 = document.getElementById("vs Friends");
+  generateBtn1.addEventListener("click", generateBoard3);  
+  let generateBtn2 = document.getElementById("vs Computer");
+  generateBtn2.addEventListener("click", chooseBlackOrWhite);
+}
 
 
 
@@ -361,7 +406,7 @@ function evaluatePotentialWins(squares, player, opponent) {
 
     if (playerCount === 5) {
       // AI player wins
-      score += 1000;
+      score += 100;
     } else if (opponentCount === 5) {
       // Opponent wins
       score -= 90;
@@ -380,14 +425,7 @@ function evaluatePotentialWins(squares, player, opponent) {
       // Potential two-in-a-row for opponent
       score -= 9;
     }
-    else if (playerCount === 2 && emptyCount === 3) {
-      // Potential two-in-a-row for AI player
-      score += 2;
-    }
-    else if (opponentCount === 2 && emptyCount === 3) {
-      // Potential two-in-a-row for opponent
-      score -= 1;
-    } 
+
   }
 
   console.log("evaluate score "+score);
@@ -414,8 +452,8 @@ function bestMove(squares, currentPlayer) {
 }
 
 function minimax(squares, depth, isMaximizing, player, opponent) {
-  const winner = calculateWinner(squares, PlayerTurn);
-  /*if (winner) {
+  /*const winner = calculateWinner(squares, PlayerTurn);
+  if (winner) {
     if (winner == "Draw") {
       return 0;
     } else if (winner == "Computer") {
@@ -457,9 +495,10 @@ function minimax(squares, depth, isMaximizing, player, opponent) {
 
 
 
-
 //start the program
-let generateBtn1 = document.getElementById("vs Friends");
-generateBtn1.addEventListener("click", generateBoard);
-let generateBtn2 = document.getElementById("vs Computer");
-generateBtn2.addEventListener("click", chooseBlackOrWhite);
+let Btn1 = document.getElementById("vs Friends");
+Btn1.addEventListener("click", generateBoard);  
+let Btn2 = document.getElementById("vs Computer");
+Btn2.addEventListener("click", chooseBlackOrWhite);
+let generateBtn3 = document.getElementById("Back");
+generateBtn3.addEventListener("click", choosePlayVsFriendsOrComputer);
