@@ -9,9 +9,6 @@ function sleep(ms) {
 }
 
 
-
-
-
 function Square({ value, onSquareClick}) {
   let t="tile "+value+"tile";
   return (
@@ -22,17 +19,12 @@ function Square({ value, onSquareClick}) {
 }
 
 
-const ValidMoves=new Set([0,8,16,24,32,40,48,56,7,15,23,31,39,47,55,63]);
-const PlayedSquares=Array(64).fill(null);
+let ValidMoves=new Set([0,8,16,24,32,40,48,56,7,15,23,31,39,47,55,63]);
+let PlayedSquares=Array(64).fill(null);
 let players=["player1","player2"];//default value for 2 players game (player1 vs player2)
 let PlayerTurn=players[0];
 let ColorPlayer1="Black";
 let ColorPlayer2="White";
-
-
-
-  
-
 
 function openNewMove(j,nextSquares){
   let nextSquare;
@@ -64,9 +56,6 @@ else{
   }
   ValidMoves.delete(j);
   console.log("ValidMoves ",ValidMoves);
-  const move = new Audio('move.mp3');
-  // Play the audio
-  move.play(); 
 }
 
 function Board({ player1Turn, squares, onPlay }) {
@@ -102,8 +91,8 @@ function Board({ player1Turn, squares, onPlay }) {
           player1Turn=!player1Turn;
           openNewMove(i,nextSquares);
           onPlay(nextSquares,1);
-            const move = new Audio('move.mp3');
-            // Play the audio
+          const move = new Audio('./Sounds/ValidMoveSound.mp3');
+          // Play the audio
             move.play();    
 
     
@@ -111,7 +100,7 @@ function Board({ player1Turn, squares, onPlay }) {
 
     else if (squares[i]==null){
         console.log("Invalid Square!!,Please try again");
-        const wrongSound = new Audio('wrong.mp3');
+        const wrongSound = new Audio('./Sounds/InvalidMoveSound.mp3');
         // Play the audio
         wrongSound.play();
         const nextSquares = squares.slice();
@@ -128,7 +117,7 @@ function Board({ player1Turn, squares, onPlay }) {
   if (winner) {
       if (winner=="Draw" ) {
         status = 'Draw';
-        const Draw = new Audio('gameoverSound.wav');
+        const Draw = new Audio('GameOverSound.wav');
         // Play the audio
         Draw.play();
         console.log("Finish Game");
@@ -136,7 +125,7 @@ function Board({ player1Turn, squares, onPlay }) {
       }
       else{
         status = 'Winner: ' + winner;
-        const win = new Audio('win.mp3');
+        const win = new Audio('./Sounds/WinningStatusSound.mp3');
         // Play the audio
         win.play();
         console.log("Finish Game");
@@ -207,9 +196,14 @@ let App = function Game() {
     }
   }
   return (
+    
     <div className="game">
         <Board player1Turn={player1Turn} squares={currentSquares} onPlay={handlePlay}/>
+        <button class="generate-btn" id="PlayAgain" onClick={generateBoard}>play again</button>
     </div>
+
+
+
   );
 }
 
@@ -273,6 +267,8 @@ function calculateWinner(PlayedSquares,player1Turn) {
 }
 
 function generateBoard(){
+ValidMoves=new Set([0,8,16,24,32,40,48,56,7,15,23,31,39,47,55,63]);
+PlayedSquares=Array(64).fill(null);
 PlayerTurn=players[0];
 const root = createRoot(document.getElementById('root'));
 root.render(
@@ -284,6 +280,7 @@ root.render(
 
 //screen to choose black or white
 function chooseBlackOrWhite(){
+  console.log("chooseBlackOrWhite");
   let pairsContainer = document.getElementById("root");
   let pairElement1 = document.createElement("button");
   pairElement1.classList.add("generate-btn");
