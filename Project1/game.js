@@ -361,7 +361,7 @@ function evaluatePotentialWins(squares, player, opponent) {
 
     if (playerCount === 5) {
       // AI player wins
-      score += 100;
+      score += 1000;
     } else if (opponentCount === 5) {
       // Opponent wins
       score -= 90;
@@ -402,7 +402,7 @@ function bestMove(squares, currentPlayer) {
   for (let i = 0; i < ValidMoves.size; i++) {
     const m = validMovesArray[i];
     squares[m] = ColorPlayer2;
-    let score = minimax(squares, 3, false, ColorPlayer2, ColorPlayer1);
+    let score = minimax(squares, 0, false, ColorPlayer2, ColorPlayer1);
     
     squares[m] = null;
     if (score > bestScore) {
@@ -424,7 +424,7 @@ function minimax(squares, depth, isMaximizing, player, opponent) {
       return -1000;
     }
   }
- if (depth == 0 ||depth == 1 || depth==2 || depth==3) {
+ if (depth == 0) {
     return evaluatePotentialWins(squares, player, opponent);
   }
 
