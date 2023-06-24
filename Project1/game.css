@@ -74,7 +74,7 @@ display: block;
 .game {
   display: grid; 
    place-content: center; 
-   /*height: 90vh;*/
+   /*height: 81vh;*/
   }
   .tile.highlight{
     background-color: blue;
@@ -288,34 +288,6 @@ display: block;
   line-height: 1;
   color: #ccc;
 }
-
-
-@media only screen and (max-width:960px){
-
-.popup{
-  transform: translate(-50%,-121%);
-  width: 82%;
-  height: 23%; 
-}
-.body{
-  background-image: image-set("./img/Background/Cave.jpg");
-}
-
-}
-@media all and (max-width: 900px) {.body{
-  background-image: image-set("./img/Background/Cave.jpg");
-} 
-}
-
-    @media screen and (max-width: 800px) and (orientation: landscape), screen and (max-height: 300px) {
-      .body{
-        background-image: image-set("./img/Background/Cave.jpg");
-      } 
-    }
-
-
-
-
 
 
 .popup{

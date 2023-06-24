@@ -65,12 +65,7 @@ function Board({ player1Turn, squares, onPlay }) {
     console.log("clicked on square "+i);
     console.log("PlayerTurn "+PlayerTurn);  
     if(ValidMoves.has(i)){
-        if (calculateWinner(PlayedSquares,player1Turn)=="Draw") {
-        return;
-        }
-        else if (calculateWinner(PlayedSquares,player1Turn) || PlayedSquares[i]) {
-        return;
-        }
+
         const nextSquares = squares.slice();
 
         if (PlayerTurn=="Player"){
@@ -100,9 +95,9 @@ function Board({ player1Turn, squares, onPlay }) {
 
     else if (squares[i]==null){
         console.log("Invalid Square!!,Please try again");
-        const wrongSound = new Audio('./Sounds/InvalidMoveSound.mp3');
+        const invalidMove = new Audio('./Sounds/InvalidMoveSound.mp3');
         // Play the audio
-        wrongSound.play();
+        invalidMove.play();
         const nextSquares = squares.slice();
         nextSquares[i]="Invalid";
         onPlay(nextSquares,0);
@@ -111,10 +106,12 @@ function Board({ player1Turn, squares, onPlay }) {
         onPlay(nextSquares,0); 
     }
   }
+
   let st="status";
   const winner = calculateWinner(PlayedSquares,player1Turn);
   let status;
   if (winner) {
+    console.log("winner "+winner);
       if (winner=="Draw" ) {
         status = 'Draw';
         const Draw = new Audio('./Sounds/GameOverSound.wav');
@@ -123,15 +120,16 @@ function Board({ player1Turn, squares, onPlay }) {
         console.log("Finish Game");
         st="status Draw";
       }
-      else if (winner=="Computer"){
+      /*else if (winner=="Computer"){
         status = 'Game Over';
         const lose = new Audio('./Sounds/GameOverSound.wav');
         // Play the audio
         lose.play();
         console.log("Finish Game");
         st="status Lose";
-      }
+      }*/
       else{
+       // startConfetti();
         status = 'Winner: ' + winner;
         const win = new Audio('./Sounds/WinningStatusSound.mp3');
         // Play the audio
@@ -165,7 +163,6 @@ function Board({ player1Turn, squares, onPlay }) {
   if (PlayerTurn=="Computer"){
     const nextSquares = squares.slice();
     console.log("Computer Turn");
-    //let  validMovesArray = Array.from(ValidMoves);
     let j= bestMove(nextSquares,PlayerTurn);
     console.log("j after minmax "+j);
     nextSquares[j]=ColorPlayer2;

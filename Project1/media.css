@@ -1,0 +1,26 @@
+
+
+@media screen and (max-width:400px){
+    
+    .popup{
+        transform: translate(-50%,-148%);
+        width: 64%;
+        height: 24%;
+    }
+
+}
+
+@media screen and (max-width:1100px){
+    .popup{
+        transform: translate(-50%,-170%);
+        width: 64%;
+        height: 18%;
+    }
+    
+    
+    .generate-btn{
+        font-size: 35px;
+        }
+
+
+}
