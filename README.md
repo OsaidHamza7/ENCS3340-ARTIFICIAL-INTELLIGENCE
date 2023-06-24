@@ -1,5 +1,5 @@
 # ENCS3340-ARTIFICIAL-INTELLIGENCE
-https://lucent-lebkuchen-a93af8.netlify.app/
+
 
 🔗 | [Project Statment](Project1/AI_project.pdf)  <br>
 🔗 | [Visit Website](https://lucent-lebkuchen-a93af8.netlify.app/)
