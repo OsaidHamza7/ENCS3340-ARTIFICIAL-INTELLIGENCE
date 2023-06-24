@@ -4,5 +4,5 @@ https://lucent-lebkuchen-a93af8.netlify.app/
 🔗 | [Project Statment](Project1/README.md)  <br>
 🔗 | [Installation](https://lucent-lebkuchen-a93af8.netlify.app)<br>
 
-![Website Screenshot](img/)
+![Website Screenshot](project1/img/Background/cave.png)
 [Visit Website](https://lucent-lebkuchen-a93af8.netlify.app/)
