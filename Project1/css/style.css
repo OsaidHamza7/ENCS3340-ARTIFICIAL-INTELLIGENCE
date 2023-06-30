@@ -275,7 +275,7 @@ ol {
 	left: 0;
 	top: 0;
 	z-index: 99;
-	padding: 15px 15px 0;
+	padding: 0px 0px 0;
 }
 
 .header-warp {
@@ -289,7 +289,7 @@ ol {
 	display: inline-block;
 	color: #9190a5;
 	font-size: 16px;
-	padding-top: 4px;
+	padding-top: 0px;
 }
 
 .header-social a,
@@ -299,8 +299,8 @@ ol {
 	display: -webkit-inline-box;
 	display: -ms-inline-flexbox;
 	display: inline-flex;
-	width: 32px;
-	height: 32px;
+	width: 3px;
+	height: 3px;
 	-webkit-box-align: center;
 	-ms-flex-align: center;
 	align-items: center;
@@ -324,7 +324,7 @@ ol {
 
 .header-bar-warp {
 	background: #081624;
-	padding: 39px 40px 0;
+	padding: 30px 30px 0;
 	-webkit-box-shadow: 0 0 9px 3px rgba(226, 30, 228, 0.24);
 	box-shadow: 0 0 9px 3px rgba(226, 30, 228, 0.24);
 }
@@ -335,10 +335,10 @@ ol {
 
 .user-panel {
 	float: right;
-	font-size: 16px;
+	font-size: 20px;
 	font-weight: 500;
 	color: #fff;
-	padding-top: 3px;
+	padding-top: 7px;
 }
 
 .user-panel a {
@@ -362,7 +362,7 @@ ol {
 
 .main-menu li a {
 	display: block;
-	font-size: 16px;
+	font-size: 20px;
 	font-weight: 500;
 	color: #fff;
 	margin-right: 40px;
@@ -374,8 +374,8 @@ ol {
 .main-menu li a:after {
 	position: absolute;
 	content: "";
-	width: 20px;
-	height: 20px;
+	width: 23px;
+	height: 23px;
 	right: 0;
 	top: 1px;
 	background-image: url("../img/icons/arrow-down.png");
