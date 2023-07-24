@@ -1,3 +1,7 @@
+// We certify that this submission is the original work of members of the group and meets the Faculty's Expectations of Originality
+// Osaid Hamza 1200875
+// Mohammed Owda 1200089
+// 20/6/2023
 
 import React, { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
@@ -8,7 +12,7 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-
+// function to create a new square
 function Square({ value, onSquareClick}) {
   let t="tile "+value+"tile";
   return (
@@ -18,7 +22,7 @@ function Square({ value, onSquareClick}) {
   );
 }
 
-
+// initial valid moves
 let ValidMoves=new Set([0,8,16,24,32,40,48,56,7,15,23,31,39,47,55,63]);
 let PlayedSquares=Array(64).fill(null);
 let players=["player1","player2"];//default value for 2 players game (player1 vs player2)
@@ -26,6 +30,7 @@ let PlayerTurn=players[0];
 let ColorPlayer1="Black";
 let ColorPlayer2="White";
 
+// function to create a new board
 function openNewMove(j,nextSquares){
   let nextSquare;
   console.log("j "+j);
@@ -58,6 +63,7 @@ else{
   console.log("ValidMoves ",ValidMoves);
 }
 
+// function to generate a new board
 function Board({ player1Turn, squares, onPlay }) {
 
 
@@ -393,20 +399,21 @@ function evaluatePotentialWins(squares, player, opponent) {
   [28, 35, 42, 49, 56], [29, 36, 43, 50, 57], [30, 37, 44, 51, 58], [31, 38, 45, 52, 59]
 ];
 
-
+  // loop through all the winning combinations
   for (const combination of winningCombinations) {
     const squaresSubset = combination.map((index) => squares[index]);
 
+    // find the player count, opponent count and empty count
     const playerCount = squaresSubset.filter((square) => square === player).length;
     const opponentCount = squaresSubset.filter((square) => square === opponent).length;
     const emptyCount = squaresSubset.filter((square) => square === null).length;
 
     if (playerCount === 5) {
       // AI player wins
-      score += 100;
+      score += 1000;
     } else if (opponentCount === 5) {
       // Opponent wins
-      score -= 90;
+      score -= 900;
     } else
 
     if (playerCount === 4 && emptyCount === 1) {
@@ -420,8 +427,18 @@ function evaluatePotentialWins(squares, player, opponent) {
       score += 10;
     } else if (opponentCount === 3 && emptyCount === 2) {
       // Potential two-in-a-row for opponent
-      score -= 9;
-    }
+      score -= 20;
+    } else if (playerCount === 2 && emptyCount === 3) {
+      // Potential one-in-a-row for AI player
+      score += 8;
+    } else if (opponentCount === 2 && emptyCount === 3) {
+      // Potential one-in-a-row for opponent
+      score -= 5;
+    } else if (playerCount === 1 && emptyCount === 4) {
+      // Potential one-in-a-row for AI player
+      score += 1;
+    } 
+
 
   }
 
@@ -429,11 +446,14 @@ function evaluatePotentialWins(squares, player, opponent) {
   return score;
 }
 
+// Function to find the best move for AI player
 function bestMove(squares, currentPlayer) {
   // AI to make its turn
   let bestScore = -Infinity;
   let move;
   const validMovesArray = Array.from(ValidMoves);
+  
+  // Loop through all empty valid moves and find the best move
   for (let i = 0; i < ValidMoves.size; i++) {
     const m = validMovesArray[i];
     squares[m] = ColorPlayer2;
@@ -448,8 +468,9 @@ function bestMove(squares, currentPlayer) {
   return move;
 }
 
+// function to calculate the minimax score for each valid move recursively and return the best score
 function minimax(squares, depth, isMaximizing, player, opponent) {
-  /*const winner = calculateWinner(squares, PlayerTurn);
+  const winner = calculateWinner(squares, PlayerTurn);
   if (winner) {
     if (winner == "Draw") {
       return 0;
@@ -458,13 +479,16 @@ function minimax(squares, depth, isMaximizing, player, opponent) {
     } else {
       return -1000;
     }
-  }*/
+  }
+
+  // if depth is 0, return the score
  if (depth == 0) {
     return evaluatePotentialWins(squares, player, opponent);
   }
 
   const validMovesArray = Array.from(ValidMoves);
 
+  // if it is AI player's turn
   if (isMaximizing) {
     let bestScore = -Infinity;
     for (let i = 0; i < ValidMoves.size; i++) {
@@ -477,6 +501,7 @@ function minimax(squares, depth, isMaximizing, player, opponent) {
       bestScore = Math.max(score, bestScore);
     }
     return bestScore;
+    // if it is opponent's turn
   } else {
     let bestScore = Infinity;
     for (let i = 0; i < validMovesArray.length; i++) {
