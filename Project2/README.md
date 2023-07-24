@@ -6,3 +6,6 @@ ___________________________________________________________
 🔗 | [Report](AIReport2.pdf)  <br>
 
 
+## Group
+- Osaid Hamza
+- Mohammad Odeh
