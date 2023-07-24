@@ -1,2 +1,8 @@
-# ENCS3340-ARTIFICIAL-INTELLIGENCE-2
- AI Project 2
+# Project 2
+
+___________________________________________________________
+
+🔗 | [Project Statment](AI_project2.pdf)  <br>
+🔗 | [Report](AIReport2.pdf)  <br>
+
+
