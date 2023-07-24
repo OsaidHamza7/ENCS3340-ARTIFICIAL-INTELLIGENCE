@@ -2,7 +2,7 @@
 
 ___________________________________________________________
 
-🔗 | [Project Statment](AI_project2.pdf)  <br>
+🔗 | [Project Description](AI_project2.pdf)  <br>
 🔗 | [Report](AIReport2.pdf)  <br>
 
 
