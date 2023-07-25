@@ -6,7 +6,11 @@ ___________________________________________________________
 🔗 | [Report](AIReport.pdf)  <br>
 🔗 | [Visit Website](https://lucent-lebkuchen-a93af8.netlify.app/)
 
-![Website Screenshot](img/Background/Cave.png)
+![Website Screenshot1](./Screens/1.png)
+![Website Screenshot2](./Screens/2.png)
+![Website Screenshot3](./Screens/3.png)
+![Website Screenshot4](./Screens/4.png)
+![Website Screenshot5](./Screens/5.png)
 
  ## Partners
 ___________________________________________________________
