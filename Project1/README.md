@@ -8,6 +8,8 @@ ___________________________________________________________
 
 ![Website Screenshot](img/Background/Cave.png)
 
-## Group
-- Osaid Hamza
-- Mohammad Odeh
+ ## Partners
+___________________________________________________________
+🔗 | [Osaid Hamza](https://github.com/OsaidHamza7)  
+🔗 | [Mohammad Odeh](https://github.com/M7mdOdeh1) 
+___________________________________________________________
