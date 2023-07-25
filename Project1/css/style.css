@@ -1,15 +1,4 @@
-/* =================================
-------------------------------------
-  EndGam - Gaming Magazine Template
-  Version: 1.0
- ------------------------------------
- ====================================*/
 
-
-
-/*----------------------------------------*/
-/* Template default CSS
-/*----------------------------------------*/
 
 html,
 body {
@@ -299,7 +288,7 @@ ol {
 	display: -webkit-inline-box;
 	display: -ms-inline-flexbox;
 	display: inline-flex;
-	width: 3px;
+	
 	height: 3px;
 	-webkit-box-align: center;
 	-ms-flex-align: center;
